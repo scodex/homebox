@@ -2723,7 +2723,7 @@ components:
       properties:
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         locationId:
           description: Edges
           type: string
@@ -2959,7 +2959,7 @@ components:
           nullable: true
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         fields:
           description: Custom fields
           type: array
@@ -3088,7 +3088,7 @@ components:
           nullable: true
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         fields:
           description: Custom fields
           type: array
@@ -3129,7 +3129,7 @@ components:
           type: string
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         fields:
           type: array
           items:
@@ -3412,7 +3412,7 @@ components:
           type: string
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         icon:
           type: string
           maxLength: 255
@@ -3727,7 +3727,7 @@ components:
       properties:
         description:
           type: string
-          maxLength: 1000
+          maxLength: 10000
         locationId:
           type: string
         name:

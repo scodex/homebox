@@ -156,7 +156,7 @@
       <FormTextArea
         v-model="form.description"
         :label="$t('components.item.create_modal.item_description')"
-        :max-length="1000"
+        :max-length="10000"
       />
       <TagSelector v-model="form.tags" :tags="tags ?? []" />
       <div class="flex w-full flex-col gap-1.5">

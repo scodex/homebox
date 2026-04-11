@@ -169,7 +169,7 @@
           <FormTextArea
             v-model="updateData.description"
             :label="$t('components.location.create_modal.location_description')"
-            :max-length="1000"
+            :max-length="10000"
           />
           <LocationSelector v-model="parent" :current-location="location" />
           <DialogFooter>

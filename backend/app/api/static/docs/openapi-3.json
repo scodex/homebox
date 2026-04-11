@@ -4368,7 +4368,7 @@
                 "properties": {
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "locationId": {
                         "description": "Edges",
@@ -4708,7 +4708,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "fields": {
                         "description": "Custom fields",
@@ -4893,7 +4893,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "fields": {
                         "description": "Custom fields",
@@ -4951,7 +4951,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "fields": {
                         "type": "array",
@@ -5366,7 +5366,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "icon": {
                         "type": "string",
@@ -5843,7 +5843,7 @@
                 "properties": {
                     "description": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 10000
                     },
                     "locationId": {
                         "type": "string"

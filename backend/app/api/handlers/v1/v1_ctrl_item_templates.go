@@ -105,7 +105,7 @@ func (ctrl *V1Controller) HandleItemTemplatesDelete() errchain.HandlerFunc {
 
 type ItemTemplateCreateItemRequest struct {
 	Name        string      `json:"name"        validate:"required,min=1,max=255"`
-	Description string      `json:"description" validate:"max=1000"`
+	Description string      `json:"description" validate:"max=10000"`
 	LocationID  uuid.UUID   `json:"locationId"  validate:"required"`
 	TagIDs      []uuid.UUID `json:"tagIds"`
 	Quantity    *float64    `json:"quantity"`

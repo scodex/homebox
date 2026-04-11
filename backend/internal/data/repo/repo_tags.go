@@ -29,7 +29,7 @@ type (
 	TagCreate struct {
 		Name        string    `json:"name"        validate:"required,min=1,max=255"`
 		ParentID    uuid.UUID `json:"parentId"    extensions:"x-nullable"`
-		Description string    `json:"description" validate:"max=1000"`
+		Description string    `json:"description" validate:"max=10000"`
 		Color       string    `json:"color"`
 		Icon        string    `json:"icon"        validate:"max=255"`
 	}
@@ -41,7 +41,7 @@ type (
 		ID          uuid.UUID `json:"id"`
 		ParentID    uuid.UUID `json:"parentId"    extensions:"x-nullable"`
 		Name        string    `json:"name"        validate:"required,min=1,max=255"`
-		Description string    `json:"description" validate:"max=1000"`
+		Description string    `json:"description" validate:"max=10000"`
 		Color       string    `json:"color"`
 		Icon        string    `json:"icon"        validate:"max=255"`
 	}

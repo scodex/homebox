@@ -923,7 +923,7 @@ definitions:
   repo.ItemCreate:
     properties:
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       locationId:
         description: Edges
@@ -1159,7 +1159,7 @@ definitions:
         type: string
         x-nullable: true
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       fields:
         description: Custom fields
@@ -1288,7 +1288,7 @@ definitions:
         type: string
         x-nullable: true
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       fields:
         description: Custom fields
@@ -1329,7 +1329,7 @@ definitions:
       assetId:
         type: string
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       fields:
         items:
@@ -1612,7 +1612,7 @@ definitions:
       color:
         type: string
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       icon:
         maxLength: 255
@@ -1926,7 +1926,7 @@ definitions:
   v1.ItemTemplateCreateItemRequest:
     properties:
       description:
-        maxLength: 1000
+        maxLength: 10000
         type: string
       locationId:
         type: string

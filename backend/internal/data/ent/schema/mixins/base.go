@@ -36,7 +36,7 @@ func (DetailsMixin) Fields() []ent.Field {
 			MaxLen(255).
 			NotEmpty(),
 		field.String("description").
-			MaxLen(1000).
+			MaxLen(10000).
 			Optional(),
 	}
 }

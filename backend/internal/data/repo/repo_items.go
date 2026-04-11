@@ -73,7 +73,7 @@ type (
 		ParentID    uuid.UUID `json:"parentId"    extensions:"x-nullable"`
 		Name        string    `json:"name"        validate:"required,min=1,max=255"`
 		Quantity    float64   `json:"quantity"`
-		Description string    `json:"description" validate:"max=1000"`
+		Description string    `json:"description" validate:"max=10000"`
 		AssetID     AssetID   `json:"-"`
 
 		// Edges
@@ -86,7 +86,7 @@ type (
 		ID                      uuid.UUID `json:"id"`
 		AssetID                 AssetID   `json:"assetId"                 swaggertype:"string"`
 		Name                    string    `json:"name"                    validate:"required,min=1,max=255"`
-		Description             string    `json:"description"             validate:"max=1000"`
+		Description             string    `json:"description"             validate:"max=10000"`
 		Quantity                float64   `json:"quantity"`
 		Insured                 bool      `json:"insured"`
 		Archived                bool      `json:"archived"`

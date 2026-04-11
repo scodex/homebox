@@ -4169,7 +4169,7 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "locationId": {
                     "description": "Edges",
@@ -4509,7 +4509,7 @@ const docTemplate = `{
                 },
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "fields": {
                     "description": "Custom fields",
@@ -4694,7 +4694,7 @@ const docTemplate = `{
                 },
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "fields": {
                     "description": "Custom fields",
@@ -4752,7 +4752,7 @@ const docTemplate = `{
                 },
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "fields": {
                     "type": "array",
@@ -5167,7 +5167,7 @@ const docTemplate = `{
                 },
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "icon": {
                     "type": "string",
@@ -5644,7 +5644,7 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 10000
                 },
                 "locationId": {
                     "type": "string"
