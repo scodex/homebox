@@ -38,7 +38,7 @@ type Config struct {
 }
 
 type AIConf struct {
-	GeminiAPIKey string `yaml:"gemini_api_key" conf:"env:GEMINI_API_KEY"`
+	GeminiAPIKey string `yaml:"gemini_api_key"`
 }
 
 type Options struct {

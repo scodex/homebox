@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -361,14 +362,25 @@ func (svc *ItemService) ExportBillOfMaterialsCSV(ctx context.Context, gid uuid.U
 	return reporting.BillOfMaterialsCSV(items)
 }
 
-func (svc *ItemService) GenerateDescription(ctx context.Context, gid, id uuid.UUID) (string, error) {
+// AIItemInfo contains structured item information extracted by the AI.
+type AIItemInfo struct {
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	Quantity     float64  `json:"quantity"`
+	SerialNumber string   `json:"serial_number"`
+	ModelNumber  string   `json:"model_number"`
+	Manufacturer string   `json:"manufacturer"`
+	Tags         []string `json:"tags"`
+}
+
+func (svc *ItemService) GenerateDescription(ctx context.Context, gid, id uuid.UUID) (*AIItemInfo, error) {
 	if svc.geminiAPIKey == "" {
-		return "", errors.New("gemini api key not configured")
+		return nil, errors.New("gemini api key not configured")
 	}
 
 	item, err := svc.repo.Items.GetOneByGroup(ctx, gid, id)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Find primary photo
@@ -382,52 +394,87 @@ func (svc *ItemService) GenerateDescription(ctx context.Context, gid, id uuid.UU
 	}
 
 	if primaryAtt == nil {
-		return "", errors.New("no primary photo found for this item")
+		return nil, errors.New("no primary photo found for this item")
 	}
 
 	// Read photo content
 	bucket, err := blob.OpenBucket(ctx, svc.repo.Attachments.GetConnString())
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer bucket.Close()
 
 	reader, err := bucket.NewReader(ctx, svc.repo.Attachments.GetFullPath(primaryAtt.Path), nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer reader.Close()
 
 	data, err := io.ReadAll(reader)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Call Gemini
 	client, err := genai.NewClient(ctx, option.WithAPIKey(svc.geminiAPIKey))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel("gemini-1.5-flash")
+	model := client.GenerativeModel("gemini-2.0-flash")
+	model.ResponseMIMEType = "application/json"
 	prompt := []genai.Part{
 		genai.ImageData(primaryAtt.MimeType, data),
-		genai.Text("Beschreibe diesen Gegenstand präzise und detailliert. Fokus auf Merkmale, Zustand und Nutzen. Antworte in Deutsch."),
+		genai.Text(`Analysiere diesen Gegenstand auf dem Bild und extrahiere folgende Informationen.
+Antworte ausschließlich als JSON-Objekt mit diesen Feldern:
+- "name": Produktname oder Bezeichnung des Gegenstands (kurz und prägnant)
+- "description": Detaillierte Beschreibung (Merkmale, Zustand, Nutzen). Auf Deutsch.
+- "quantity": Anzahl der sichtbaren Gegenstände (als Zahl, Standard: 1)
+- "serial_number": Seriennummer, falls auf dem Bild sichtbar (sonst leerer String)
+- "model_number": Modellnummer, falls erkennbar (sonst leerer String)
+- "manufacturer": Hersteller/Marke, falls erkennbar (sonst leerer String)
+- "tags": Genau 2 passende Kategorie-Tags als Array von Strings. Die Tags sollen den Gegenstand kategorisieren (z.B. Produktkategorie, Verwendungszweck). Kurz, auf Deutsch, ein Wort pro Tag.
+
+Beispiel:
+{"name": "Bosch Akkuschrauber", "description": "Blauer Akkuschrauber...", "quantity": 1, "serial_number": "", "model_number": "GSR 18V-60", "manufacturer": "Bosch", "tags": ["Werkzeug", "Elektro"]}`),
 	}
 
 	resp, err := model.GenerateContent(ctx, prompt...)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if len(resp.Candidates) == 0 || len(resp.Candidates[0].Content.Parts) == 0 {
-		return "", errors.New("no description generated")
+		return nil, errors.New("no description generated")
 	}
 
-	if part, ok := resp.Candidates[0].Content.Parts[0].(genai.Text); ok {
-		return string(part), nil
+	part, ok := resp.Candidates[0].Content.Parts[0].(genai.Text)
+	if !ok {
+		return nil, errors.New("failed to parse Gemini response")
 	}
 
-	return "", errors.New("failed to parse Gemini response")
+	var info AIItemInfo
+	raw := strings.TrimSpace(string(part))
+	if len(raw) > 0 && raw[0] == '[' {
+		// Gemini returned an array, take the first element
+		var items []AIItemInfo
+		if err := json.Unmarshal([]byte(raw), &items); err != nil {
+			return nil, fmt.Errorf("failed to parse AI JSON array response: %w", err)
+		}
+		if len(items) == 0 {
+			return nil, errors.New("AI returned empty array")
+		}
+		info = items[0]
+	} else {
+		if err := json.Unmarshal([]byte(raw), &info); err != nil {
+			return nil, fmt.Errorf("failed to parse AI JSON response: %w", err)
+		}
+	}
+
+	if info.Quantity == 0 {
+		info.Quantity = 1
+	}
+
+	return &info, nil
 }

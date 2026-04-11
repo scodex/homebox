@@ -123,12 +123,16 @@ type (
 	}
 
 	ItemPatch struct {
-		ID         uuid.UUID   `json:"id"`
-		Quantity   *float64    `json:"quantity,omitempty" extensions:"x-nullable,x-omitempty"`
-		ImportRef  *string     `json:"-"                  extensions:"x-nullable,x-omitempty"`
-		Description *string     `json:"description,omitempty" extensions:"x-nullable,x-omitempty"`
-		LocationID uuid.UUID   `json:"locationId"         extensions:"x-nullable,x-omitempty"`
-		TagIDs     []uuid.UUID `json:"tagIds"             extensions:"x-nullable,x-omitempty"`
+		ID           uuid.UUID   `json:"id"`
+		Quantity     *float64    `json:"quantity,omitempty" extensions:"x-nullable,x-omitempty"`
+		ImportRef    *string     `json:"-"                  extensions:"x-nullable,x-omitempty"`
+		Description  *string     `json:"description,omitempty" extensions:"x-nullable,x-omitempty"`
+		Name         *string     `json:"name,omitempty" extensions:"x-nullable,x-omitempty"`
+		SerialNumber *string     `json:"serialNumber,omitempty" extensions:"x-nullable,x-omitempty"`
+		ModelNumber  *string     `json:"modelNumber,omitempty" extensions:"x-nullable,x-omitempty"`
+		Manufacturer *string     `json:"manufacturer,omitempty" extensions:"x-nullable,x-omitempty"`
+		LocationID   uuid.UUID   `json:"locationId"         extensions:"x-nullable,x-omitempty"`
+		TagIDs       []uuid.UUID `json:"tagIds"             extensions:"x-nullable,x-omitempty"`
 	}
 
 	ItemSummary struct {
@@ -1106,6 +1110,22 @@ func (e *ItemsRepository) Patch(ctx context.Context, gid, id uuid.UUID, data Ite
 
 	if data.LocationID != uuid.Nil {
 		q.SetLocationID(data.LocationID)
+	}
+
+	if data.Name != nil {
+		q.SetName(*data.Name)
+	}
+
+	if data.SerialNumber != nil {
+		q.SetSerialNumber(*data.SerialNumber)
+	}
+
+	if data.ModelNumber != nil {
+		q.SetModelNumber(*data.ModelNumber)
+	}
+
+	if data.Manufacturer != nil {
+		q.SetManufacturer(*data.Manufacturer)
 	}
 
 	err = q.Exec(ctx)

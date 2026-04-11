@@ -272,7 +272,7 @@ func (ctrl *V1Controller) HandleItemGenerateDescription() errchain.HandlerFunc {
 		overwrite := queryBool(r.URL.Query().Get("overwrite"))
 		ctx := services.NewContext(r.Context())
 
-		description, err := ctrl.svc.Items.GenerateDescription(r.Context(), ctx.GID, id)
+		aiInfo, err := ctrl.svc.Items.GenerateDescription(r.Context(), ctx.GID, id)
 		if err != nil {
 			log.Err(err).Msg("failed to generate description")
 			return validate.NewRequestError(err, http.StatusInternalServerError)
@@ -283,15 +283,95 @@ func (ctrl *V1Controller) HandleItemGenerateDescription() errchain.HandlerFunc {
 			return err
 		}
 
-		newDescription := description
-		if !overwrite && item.Description != "" {
-			newDescription = item.Description + "\n\n" + description
+		patch := repo.ItemPatch{
+			ID: id,
 		}
 
-		err = ctrl.repo.Items.Patch(ctx, ctx.GID, id, repo.ItemPatch{
-			ID:          id,
-			Description: &newDescription,
-		})
+		// Description
+		newDescription := aiInfo.Description
+		if !overwrite && item.Description != "" {
+			newDescription = item.Description + "\n\n" + aiInfo.Description
+		}
+		patch.Description = &newDescription
+
+		// Name: only set if AI found one and (overwrite or current is empty)
+		if aiInfo.Name != "" && (overwrite || item.Name == "") {
+			patch.Name = &aiInfo.Name
+		}
+
+		// Quantity
+		if aiInfo.Quantity > 0 {
+			patch.Quantity = &aiInfo.Quantity
+		}
+
+		// Serial Number
+		if aiInfo.SerialNumber != "" && (overwrite || item.SerialNumber == "") {
+			patch.SerialNumber = &aiInfo.SerialNumber
+		}
+
+		// Model Number
+		if aiInfo.ModelNumber != "" && (overwrite || item.ModelNumber == "") {
+			patch.ModelNumber = &aiInfo.ModelNumber
+		}
+
+		// Manufacturer
+		if aiInfo.Manufacturer != "" && (overwrite || item.Manufacturer == "") {
+			patch.Manufacturer = &aiInfo.Manufacturer
+		}
+
+		// Tags: resolve or create AI-suggested tags, merge with existing
+		if len(aiInfo.Tags) > 0 {
+			// Get existing tags for this group
+			existingTags, err := ctrl.repo.Tags.GetAll(ctx, ctx.GID)
+			if err != nil {
+				log.Err(err).Msg("failed to get existing tags")
+				return validate.NewRequestError(err, http.StatusInternalServerError)
+			}
+
+			// Build name->ID map (case-insensitive)
+			tagMap := make(map[string]uuid.UUID)
+			for _, t := range existingTags {
+				tagMap[strings.ToLower(t.Name)] = t.ID
+			}
+
+			// Collect current item tag IDs
+			currentTagIDs := make([]uuid.UUID, len(item.Tags))
+			for i, t := range item.Tags {
+				currentTagIDs[i] = t.ID
+			}
+			tagSet := make(map[uuid.UUID]bool)
+			for _, id := range currentTagIDs {
+				tagSet[id] = true
+			}
+
+			// Resolve AI tags (find existing or create new)
+			for _, tagName := range aiInfo.Tags {
+				tagName = strings.TrimSpace(tagName)
+				if tagName == "" {
+					continue
+				}
+
+				tagID, exists := tagMap[strings.ToLower(tagName)]
+				if !exists {
+					// Create new tag
+					newTag, err := ctrl.repo.Tags.Create(ctx, ctx.GID, repo.TagCreate{Name: tagName})
+					if err != nil {
+						log.Err(err).Str("tag", tagName).Msg("failed to create AI tag")
+						continue
+					}
+					tagID = newTag.ID
+				}
+
+				if !tagSet[tagID] {
+					currentTagIDs = append(currentTagIDs, tagID)
+					tagSet[tagID] = true
+				}
+			}
+
+			patch.TagIDs = currentTagIDs
+		}
+
+		err = ctrl.repo.Items.Patch(ctx, ctx.GID, id, patch)
 		if err != nil {
 			return err
 		}

@@ -9,11 +9,12 @@ services:
         - BUILD_TIME=0001-01-01T00:00:00Z
       x-bake:
         platforms:
-            - linux/amd64
-            - linux/arm64
-            - linux/arm
+          - linux/amd64
+          - linux/arm64
+          - linux/arm
     environment:
       - HBOX_DEBUG=true
       - HBOX_LOGGER_LEVEL=-1
+      - HBOX_AI_GEMINI_API_KEY=${HBOX_AI_GEMINI_API_KEY}
     ports:
       - 3100:7745
