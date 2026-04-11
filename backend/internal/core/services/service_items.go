@@ -371,6 +371,7 @@ type AIItemInfo struct {
 	ModelNumber  string   `json:"model_number"`
 	Manufacturer string   `json:"manufacturer"`
 	Tags         []string `json:"tags"`
+	Barcode      string   `json:"barcode"`
 }
 
 func (svc *ItemService) GenerateDescription(ctx context.Context, gid, id uuid.UUID) (*AIItemInfo, error) {
@@ -435,9 +436,10 @@ Antworte ausschließlich als JSON-Objekt mit diesen Feldern:
 - "model_number": Modellnummer, falls erkennbar (sonst leerer String)
 - "manufacturer": Hersteller/Marke, falls erkennbar (sonst leerer String)
 - "tags": Genau 2 passende Kategorie-Tags als Array von Strings. Die Tags sollen den Gegenstand kategorisieren (z.B. Produktkategorie, Verwendungszweck). Kurz, auf Deutsch, ein Wort pro Tag.
+- "barcode": Inhalt eines sichtbaren Barcodes oder QR-Codes (falls vorhanden, sonst leerer String)
 
 Beispiel:
-{"name": "Bosch Akkuschrauber", "description": "Blauer Akkuschrauber...", "quantity": 1, "serial_number": "", "model_number": "GSR 18V-60", "manufacturer": "Bosch", "tags": ["Werkzeug", "Elektro"]}`),
+{"name": "Bosch Akkuschrauber", "description": "Blauer Akkuschrauber...", "quantity": 1, "serial_number": "", "model_number": "GSR 18V-60", "manufacturer": "Bosch", "tags": ["Werkzeug", "Elektro"], "barcode": "4059952513959"}`),
 	}
 
 	resp, err := model.GenerateContent(ctx, prompt...)

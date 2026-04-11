@@ -39,7 +39,7 @@ HomeBox is the inventory and organization system built for the Home User! With a
 - 📸 Image Upload - Upload images of your items to make it easy to identify them.
 - 📄 Document and Warranty Tracking - Keep track of important documents and warranties for your items.
 - 💰 Purchase & Maintenance Tracking - Track purchase dates, prices, and maintenance schedules for your items.
-- 🤖 AI Item Recognition - Automatically extract item details (name, description, serial numbers, labels) from photos using Google Gemini.
+- 🤖 AI Item Recognition - Automatically extract item details (name, description, serial numbers, labels, barcodes/QR-codes) from photos using Google Gemini.
 - 📱 Responsive Design - Homebox is designed to work on any device, including desktops, tablets, and smartphones.
 
 ## AI Configuration (Optional)

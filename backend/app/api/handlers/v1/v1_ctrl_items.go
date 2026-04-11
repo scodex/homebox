@@ -287,10 +287,14 @@ func (ctrl *V1Controller) HandleItemGenerateDescription() errchain.HandlerFunc {
 			ID: id,
 		}
 
-		// Description
+		// Description & Barcode
 		newDescription := aiInfo.Description
+		if aiInfo.Barcode != "" {
+			newDescription += "\n\nBarcode: " + aiInfo.Barcode
+		}
+
 		if !overwrite && item.Description != "" {
-			newDescription = item.Description + "\n\n" + aiInfo.Description
+			newDescription = item.Description + "\n\n" + newDescription
 		}
 		patch.Description = &newDescription
 

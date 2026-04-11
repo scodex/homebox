@@ -493,7 +493,7 @@
         "delete_item_confirm": "Sind Sie sicher, dass Sie diesen Artikel löschen möchten?",
         "description": "Beschreibung",
         "generate_description_ai": "KI-Erkennung starten",
-        "generate_description_ai_help": "Gemini analysiert das primäre Bild und füllt automatisch Name, Beschreibung, Seriennummer, Modellnummer, Hersteller und 2 Tags aus.",
+        "generate_description_ai_help": "Gemini analysiert das primäre Bild und füllt automatisch Name, Beschreibung, Seriennummer, Modellnummer, Hersteller, Barcodes/QR-Codes und 2 Tags aus.",
         "overwrite_description": "Bestehende Daten überschreiben",
         "generate": "Generieren",
         "details": "Details",

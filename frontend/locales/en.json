@@ -497,7 +497,7 @@
         "delete_item_confirm": "Are you sure you want to delete this item?",
         "description": "Description",
         "generate_description_ai": "AI Item Recognition",
-        "generate_description_ai_help": "Gemini will analyze the primary photo and automatically fill in name, description, serial number, model number, manufacturer, and 2 tags.",
+        "generate_description_ai_help": "Gemini will analyze the primary photo and automatically fill in name, description, serial number, model number, manufacturer, barcode/QR code, and 2 tags.",
         "overwrite_description": "Overwrite existing data",
         "generate": "Generate",
         "details": "Details",
