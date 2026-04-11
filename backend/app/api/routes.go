@@ -154,6 +154,7 @@ func (a *app) mountRoutes(r *chi.Mux, chain *errchain.ErrChain, repos *repo.AllR
 		r.Get("/items/{id}/path", chain.ToHandlerFunc(v1Ctrl.HandleItemFullPath(), userMW...))
 		r.Put("/items/{id}", chain.ToHandlerFunc(v1Ctrl.HandleItemUpdate(), userMW...))
 		r.Patch("/items/{id}", chain.ToHandlerFunc(v1Ctrl.HandleItemPatch(), userMW...))
+		r.Post("/items/{id}/generate-description", chain.ToHandlerFunc(v1Ctrl.HandleItemGenerateDescription(), userMW...))
 		r.Delete("/items/{id}", chain.ToHandlerFunc(v1Ctrl.HandleItemDelete(), userMW...))
 		r.Post("/items/{id}/duplicate", chain.ToHandlerFunc(v1Ctrl.HandleItemDuplicate(), userMW...))
 

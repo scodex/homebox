@@ -252,6 +252,59 @@ func (ctrl *V1Controller) HandleItemPatch() errchain.HandlerFunc {
 	return adapters.ActionID("id", fn, http.StatusOK)
 }
 
+// HandleItemGenerateDescription godocs
+//
+//	@Summary	Generate Item Description using AI
+//	@Tags		Items
+//	@Produce	json
+//	@Param		id			path	string	true	"Item ID"
+//	@Param		overwrite	query	bool	false	"Overwrite existing description"
+//	@Success	200			{object}	repo.ItemOut
+//	@Router		/v1/items/{id}/generate-description [POST]
+//	@Security	Bearer
+func (ctrl *V1Controller) HandleItemGenerateDescription() errchain.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		id, err := ctrl.routeID(r)
+		if err != nil {
+			return err
+		}
+
+		overwrite := queryBool(r.URL.Query().Get("overwrite"))
+		ctx := services.NewContext(r.Context())
+
+		description, err := ctrl.svc.Items.GenerateDescription(r.Context(), ctx.GID, id)
+		if err != nil {
+			log.Err(err).Msg("failed to generate description")
+			return validate.NewRequestError(err, http.StatusInternalServerError)
+		}
+
+		item, err := ctrl.repo.Items.GetOneByGroup(ctx, ctx.GID, id)
+		if err != nil {
+			return err
+		}
+
+		newDescription := description
+		if !overwrite && item.Description != "" {
+			newDescription = item.Description + "\n\n" + description
+		}
+
+		err = ctrl.repo.Items.Patch(ctx, ctx.GID, id, repo.ItemPatch{
+			ID:          id,
+			Description: &newDescription,
+		})
+		if err != nil {
+			return err
+		}
+
+		result, err := ctrl.repo.Items.GetOneByGroup(ctx, ctx.GID, id)
+		if err != nil {
+			return err
+		}
+
+		return server.JSON(w, http.StatusOK, result)
+	}
+}
+
 // HandleItemDuplicate godocs
 //
 //	@Summary	Duplicate Item

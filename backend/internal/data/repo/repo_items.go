@@ -126,6 +126,7 @@ type (
 		ID         uuid.UUID   `json:"id"`
 		Quantity   *float64    `json:"quantity,omitempty" extensions:"x-nullable,x-omitempty"`
 		ImportRef  *string     `json:"-"                  extensions:"x-nullable,x-omitempty"`
+		Description *string     `json:"description,omitempty" extensions:"x-nullable,x-omitempty"`
 		LocationID uuid.UUID   `json:"locationId"         extensions:"x-nullable,x-omitempty"`
 		TagIDs     []uuid.UUID `json:"tagIds"             extensions:"x-nullable,x-omitempty"`
 	}
@@ -1089,6 +1090,10 @@ func (e *ItemsRepository) Patch(ctx context.Context, gid, id uuid.UUID, data Ite
 
 	if data.ImportRef != nil {
 		q.SetImportRef(*data.ImportRef)
+	}
+
+	if data.Description != nil {
+		q.SetDescription(*data.Description)
 	}
 
 	if data.Quantity != nil {

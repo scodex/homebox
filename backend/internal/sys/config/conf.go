@@ -34,6 +34,11 @@ type Config struct {
 	Otel       OTelConfig     `yaml:"otel"`
 	Auth       AuthConfig     `yaml:"auth"`
 	Notifier   NotifierConf   `yaml:"notifier"`
+	AI         AIConf         `yaml:"ai"`
+}
+
+type AIConf struct {
+	GeminiAPIKey string `yaml:"gemini_api_key" conf:"env:GEMINI_API_KEY"`
 }
 
 type Options struct {

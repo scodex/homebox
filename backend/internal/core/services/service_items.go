@@ -11,6 +11,10 @@ import (
 	"github.com/samber/lo"
 	"github.com/sysadminsmedia/homebox/backend/internal/core/services/reporting"
 	"github.com/sysadminsmedia/homebox/backend/internal/data/repo"
+
+	"github.com/google/generative-ai-go/genai"
+	"gocloud.dev/blob"
+	"google.golang.org/api/option"
 )
 
 var (
@@ -24,6 +28,7 @@ type ItemService struct {
 	filepath string
 
 	autoIncrementAssetID bool
+	geminiAPIKey         string
 }
 
 func (svc *ItemService) Create(ctx Context, item repo.ItemCreate) (repo.ItemOut, error) {
@@ -354,4 +359,75 @@ func (svc *ItemService) ExportBillOfMaterialsCSV(ctx context.Context, gid uuid.U
 	}
 
 	return reporting.BillOfMaterialsCSV(items)
+}
+
+func (svc *ItemService) GenerateDescription(ctx context.Context, gid, id uuid.UUID) (string, error) {
+	if svc.geminiAPIKey == "" {
+		return "", errors.New("gemini api key not configured")
+	}
+
+	item, err := svc.repo.Items.GetOneByGroup(ctx, gid, id)
+	if err != nil {
+		return "", err
+	}
+
+	// Find primary photo
+	var primaryAtt *repo.ItemAttachment
+	for i := range item.Attachments {
+		att := &item.Attachments[i]
+		if att.Primary && att.Type == "photo" {
+			primaryAtt = att
+			break
+		}
+	}
+
+	if primaryAtt == nil {
+		return "", errors.New("no primary photo found for this item")
+	}
+
+	// Read photo content
+	bucket, err := blob.OpenBucket(ctx, svc.repo.Attachments.GetConnString())
+	if err != nil {
+		return "", err
+	}
+	defer bucket.Close()
+
+	reader, err := bucket.NewReader(ctx, svc.repo.Attachments.GetFullPath(primaryAtt.Path), nil)
+	if err != nil {
+		return "", err
+	}
+	defer reader.Close()
+
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return "", err
+	}
+
+	// Call Gemini
+	client, err := genai.NewClient(ctx, option.WithAPIKey(svc.geminiAPIKey))
+	if err != nil {
+		return "", err
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel("gemini-1.5-flash")
+	prompt := []genai.Part{
+		genai.ImageData(primaryAtt.MimeType, data),
+		genai.Text("Beschreibe diesen Gegenstand präzise und detailliert. Fokus auf Merkmale, Zustand und Nutzen. Antworte in Deutsch."),
+	}
+
+	resp, err := model.GenerateContent(ctx, prompt...)
+	if err != nil {
+		return "", err
+	}
+
+	if len(resp.Candidates) == 0 || len(resp.Candidates[0].Content.Parts) == 0 {
+		return "", errors.New("no description generated")
+	}
+
+	if part, ok := resp.Candidates[0].Content.Parts[0].(genai.Text); ok {
+		return string(part), nil
+	}
+
+	return "", errors.New("failed to parse Gemini response")
 }

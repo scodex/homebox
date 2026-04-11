@@ -217,6 +217,7 @@ func run(cfg *config.Config) error {
 		services.WithAutoIncrementAssetID(cfg.Options.AutoIncrementAssetID),
 		services.WithCurrencies(currencyData),
 		services.WithNotifierConfig(&cfg.Notifier),
+		services.WithGeminiAPIKey(cfg.AI.GeminiAPIKey),
 	)
 
 	// =========================================================================

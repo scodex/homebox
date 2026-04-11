@@ -173,6 +173,19 @@ export class ItemsApi extends BaseAPI {
     });
   }
 
+  async generateDescription(id: string, overwrite: boolean) {
+    const resp = await this.http.post<void, ItemOut>({
+      url: route(`/items/${id}/generate-description`, { overwrite: overwrite.toString() }),
+    });
+
+    if (!resp.data) {
+      return resp;
+    }
+
+    resp.data = parseDate(resp.data, ["purchaseTime", "soldTime", "warrantyExpires"]);
+    return resp;
+  }
+
   import(file: File | Blob) {
     const formData = new FormData();
     formData.append("csv", file);

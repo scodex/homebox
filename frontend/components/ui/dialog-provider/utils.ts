@@ -36,6 +36,7 @@ export enum DialogID {
   UpdateTemplate = "update-template",
   ItemChangeDetails = "item-table-updater",
   WipeInventory = "wipe-inventory",
+  GenerateDescriptionAI = "generate-description-ai",
 }
 
 /**
