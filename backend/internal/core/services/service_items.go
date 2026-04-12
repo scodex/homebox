@@ -401,6 +401,18 @@ Beispiel:
 // parseAIResponse parses a JSON string from any AI provider into AIItemInfo.
 func parseAIResponse(raw string) (*AIItemInfo, error) {
 	raw = strings.TrimSpace(raw)
+	
+	// Some models (including Gemini occasionally) wrap JSON in markdown code fences — strip them
+	if strings.HasPrefix(raw, "```json") {
+		raw = strings.TrimPrefix(raw, "```json")
+		raw = strings.TrimSuffix(raw, "```")
+		raw = strings.TrimSpace(raw)
+	} else if strings.HasPrefix(raw, "```") {
+		raw = strings.TrimPrefix(raw, "```")
+		raw = strings.TrimSuffix(raw, "```")
+		raw = strings.TrimSpace(raw)
+	}
+
 	var info AIItemInfo
 
 	if len(raw) > 0 && raw[0] == '[' {
@@ -442,8 +454,9 @@ func (g *geminiAnalyzer) AnalyzeImage(ctx context.Context, mimeType string, data
 
 	model := client.GenerativeModel("gemini-2.5-flash-lite")
 	model.ResponseMIMEType = "application/json"
+	format := strings.TrimPrefix(mimeType, "image/")
 	prompt := []genai.Part{
-		genai.ImageData(mimeType, data),
+		genai.ImageData(format, data),
 		genai.Text(aiPromptText),
 	}
 
@@ -575,18 +588,6 @@ func (o *openaiAnalyzer) AnalyzeImage(ctx context.Context, mimeType string, data
 	}
 
 	raw := oResp.Choices[0].Message.Content
-
-	// Some models wrap JSON in markdown code fences — strip them
-	raw = strings.TrimSpace(raw)
-	if strings.HasPrefix(raw, "```json") {
-		raw = strings.TrimPrefix(raw, "```json")
-		raw = strings.TrimSuffix(raw, "```")
-		raw = strings.TrimSpace(raw)
-	} else if strings.HasPrefix(raw, "```") {
-		raw = strings.TrimPrefix(raw, "```")
-		raw = strings.TrimSuffix(raw, "```")
-		raw = strings.TrimSpace(raw)
-	}
 
 	return parseAIResponse(raw)
 }
