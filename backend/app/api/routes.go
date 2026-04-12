@@ -135,6 +135,12 @@ func (a *app) mountRoutes(r *chi.Mux, chain *errchain.ErrChain, repos *repo.AllR
 		r.Put("/locations/{id}", chain.ToHandlerFunc(v1Ctrl.HandleLocationUpdate(), userMW...))
 		r.Delete("/locations/{id}", chain.ToHandlerFunc(v1Ctrl.HandleLocationDelete(), userMW...))
 
+		// Floor plan endpoints
+		r.Post("/locations/{id}/floor-plan", chain.ToHandlerFunc(v1Ctrl.HandleLocationFloorPlanUpload(), userMW...))
+		r.Delete("/locations/{id}/floor-plan", chain.ToHandlerFunc(v1Ctrl.HandleLocationFloorPlanDelete(), userMW...))
+		r.Get("/locations/{id}/floor-plan/image", chain.ToHandlerFunc(v1Ctrl.HandleLocationFloorPlanImage(), userMW...))
+		r.Put("/locations/{id}/floor-plan/positions", chain.ToHandlerFunc(v1Ctrl.HandleFloorPlanPositionsUpdate(), userMW...))
+
 		// Tags endpoints
 		r.Get("/tags", chain.ToHandlerFunc(v1Ctrl.HandleTagsGetAll(), userMW...))
 		r.Post("/tags", chain.ToHandlerFunc(v1Ctrl.HandleTagsCreate(), userMW...))

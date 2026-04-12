@@ -663,6 +663,20 @@
             "location_deleted": "Lagerort gelöscht",
             "location_updated": "Lagerort aktualisiert"
         },
+        "floor_plan": {
+            "title": "Grundriss",
+            "upload": "Grundriss hochladen",
+            "edit": "Positionen bearbeiten",
+            "save": "Positionen speichern",
+            "saved": "Positionen gespeichert",
+            "save_error": "Fehler beim Speichern der Positionen",
+            "upload_error": "Fehler beim Hochladen des Grundrisses",
+            "uploaded": "Grundriss hochgeladen",
+            "delete_error": "Fehler beim Löschen des Grundrisses",
+            "deleted": "Grundriss gelöscht",
+            "drag_hint": "Marker ziehen um sie zu positionieren",
+            "empty": "Noch kein Grundriss hochgeladen"
+        },
         "update_location": "Lagerort aktualisieren"
     },
     "maintenance": {

@@ -667,6 +667,20 @@
             "location_deleted": "Location deleted",
             "location_updated": "Location updated"
         },
+        "floor_plan": {
+            "title": "Floor Plan",
+            "upload": "Upload Floor Plan",
+            "edit": "Edit Positions",
+            "save": "Save Positions",
+            "saved": "Positions saved",
+            "save_error": "Failed to save positions",
+            "upload_error": "Failed to upload floor plan",
+            "uploaded": "Floor plan uploaded",
+            "delete_error": "Failed to delete floor plan",
+            "deleted": "Floor plan deleted",
+            "drag_hint": "Drag markers to position them",
+            "empty": "No floor plan uploaded yet"
+        },
         "update_location": "Update Location"
     },
     "maintenance": {

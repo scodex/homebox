@@ -40,6 +40,8 @@ type (
 		Description string    `json:"description"`
 		CreatedAt   time.Time `json:"createdAt"`
 		UpdatedAt   time.Time `json:"updatedAt"`
+		FloorPlanX  float64   `json:"floorPlanX"`
+		FloorPlanY  float64   `json:"floorPlanY"`
 	}
 
 	LocationOutCount struct {
@@ -50,8 +52,22 @@ type (
 	LocationOut struct {
 		Parent *LocationSummary `json:"parent,omitempty"`
 		LocationSummary
-		Children   []LocationSummary `json:"children"`
-		TotalPrice float64           `json:"totalPrice"`
+		Children          []LocationSummary `json:"children"`
+		TotalPrice        float64           `json:"totalPrice"`
+		FloorPlanPath     string            `json:"floorPlanPath"`
+		FloorPlanMimeType string            `json:"floorPlanMimeType"`
+	}
+
+	FloorPlanUpdate struct {
+		LocationID uuid.UUID `json:"locationId"`
+		Path       string    `json:"path"`
+		MimeType   string    `json:"mimeType"`
+	}
+
+	FloorPlanPositionUpdate struct {
+		ID uuid.UUID `json:"id"`
+		X  float64   `json:"x"`
+		Y  float64   `json:"y"`
 	}
 )
 
@@ -171,11 +187,48 @@ func (r *LocationRepository) getOne(ctx context.Context, where ...predicate.Loca
 }
 
 func (r *LocationRepository) Get(ctx context.Context, id uuid.UUID) (LocationOut, error) {
-	return r.getOne(ctx, location.ID(id))
+	out, err := r.getOne(ctx, location.ID(id))
+	if err != nil {
+		return out, err
+	}
+	return r.enrichWithFloorPlan(ctx, out)
 }
 
 func (r *LocationRepository) GetOneByGroup(ctx context.Context, gid, id uuid.UUID) (LocationOut, error) {
-	return r.getOne(ctx, location.ID(id), location.HasGroupWith(group.ID(gid)))
+	out, err := r.getOne(ctx, location.ID(id), location.HasGroupWith(group.ID(gid)))
+	if err != nil {
+		return out, err
+	}
+	return r.enrichWithFloorPlan(ctx, out)
+}
+
+// enrichWithFloorPlan loads floor plan columns from raw SQL and sets them on a LocationOut.
+func (r *LocationRepository) enrichWithFloorPlan(ctx context.Context, out LocationOut) (LocationOut, error) {
+	// Load floor plan fields for this location
+	row := r.db.Sql().QueryRowContext(ctx,
+		`SELECT floor_plan_path, floor_plan_mime_type, floor_plan_x, floor_plan_y FROM locations WHERE id = $1`, out.ID)
+
+	var path, mimeType string
+	var fpX, fpY float64
+	if err := row.Scan(&path, &mimeType, &fpX, &fpY); err == nil {
+		out.FloorPlanPath = path
+		out.FloorPlanMimeType = mimeType
+		out.FloorPlanX = fpX
+		out.FloorPlanY = fpY
+	}
+
+	// Load floor_plan_x/y for all children
+	for i := range out.Children {
+		childRow := r.db.Sql().QueryRowContext(ctx,
+			`SELECT floor_plan_x, floor_plan_y FROM locations WHERE id = $1`, out.Children[i].ID)
+		var cx, cy float64
+		if err := childRow.Scan(&cx, &cy); err == nil {
+			out.Children[i].FloorPlanX = cx
+			out.Children[i].FloorPlanY = cy
+		}
+	}
+
+	return out, nil
 }
 
 func (r *LocationRepository) Create(ctx context.Context, gid uuid.UUID, data LocationCreate) (LocationOut, error) {
@@ -195,7 +248,7 @@ func (r *LocationRepository) Create(ctx context.Context, gid uuid.UUID, data Loc
 
 	location.Edges.Group = &ent.Group{ID: gid} // bootstrap group ID
 	r.publishMutationEvent(gid)
-	return mapLocationOut(location), nil
+	return r.enrichWithFloorPlan(ctx, mapLocationOut(location))
 }
 
 func (r *LocationRepository) update(ctx context.Context, data LocationUpdate, where ...predicate.Location) (LocationOut, error) {
@@ -449,4 +502,50 @@ func ConvertLocationsToTree(locations []FlatTreeItem) []TreeItem {
 	return lo.Map(rootIds, func(id uuid.UUID, _ int) TreeItem {
 		return *locationMap[id]
 	})
+}
+
+// ============================================================================
+// Floor Plan Methods
+// ============================================================================
+
+// UpdateFloorPlan sets or clears the floor plan image for a location.
+func (r *LocationRepository) UpdateFloorPlan(ctx context.Context, gid uuid.UUID, data FloorPlanUpdate) error {
+	_, err := r.db.Sql().ExecContext(ctx,
+		`UPDATE locations SET floor_plan_path = $1, floor_plan_mime_type = $2
+		 WHERE id = $3 AND group_locations = $4`,
+		data.Path, data.MimeType, data.LocationID, gid)
+	if err != nil {
+		return err
+	}
+	r.publishMutationEvent(gid)
+	return nil
+}
+
+// UpdateFloorPlanPositions updates X/Y coordinates for multiple locations.
+func (r *LocationRepository) UpdateFloorPlanPositions(ctx context.Context, gid uuid.UUID, positions []FloorPlanPositionUpdate) error {
+	for _, pos := range positions {
+		_, err := r.db.Sql().ExecContext(ctx,
+			`UPDATE locations SET floor_plan_x = $1, floor_plan_y = $2
+			 WHERE id = $3 AND group_locations = $4`,
+			pos.X, pos.Y, pos.ID, gid)
+		if err != nil {
+			return err
+		}
+	}
+	r.publishMutationEvent(gid)
+	return nil
+}
+
+// UpdateItemFloorPlanPositions updates X/Y coordinates for multiple items.
+func (r *LocationRepository) UpdateItemFloorPlanPositions(ctx context.Context, gid uuid.UUID, positions []FloorPlanPositionUpdate) error {
+	for _, pos := range positions {
+		_, err := r.db.Sql().ExecContext(ctx,
+			`UPDATE items SET floor_plan_x = $1, floor_plan_y = $2
+			 WHERE id = $3 AND group_items = $4`,
+			pos.X, pos.Y, pos.ID, gid)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

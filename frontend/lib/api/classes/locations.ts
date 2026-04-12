@@ -9,6 +9,17 @@ export type TreeQuery = {
   withItems: boolean;
 };
 
+export interface FloorPlanPositionUpdate {
+  id: string;
+  x: number;
+  y: number;
+}
+
+export interface FloorPlanPositionsUpdateRequest {
+  locations: FloorPlanPositionUpdate[];
+  items: FloorPlanPositionUpdate[];
+}
+
 export class LocationsApi extends BaseAPI {
   getAll(q: LocationsQuery = { filterChildren: false }) {
     return this.http.get<LocationOutCount[]>({ url: route("/locations", q) });
@@ -32,5 +43,30 @@ export class LocationsApi extends BaseAPI {
 
   update(id: string, body: LocationUpdate) {
     return this.http.put<LocationUpdate, LocationOut>({ url: route(`/locations/${id}`), body });
+  }
+
+  // Floor plan methods
+  uploadFloorPlan(id: string, file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+    return this.http.post<FormData, LocationOut>({
+      url: route(`/locations/${id}/floor-plan`),
+      data: formData,
+    });
+  }
+
+  deleteFloorPlan(id: string) {
+    return this.http.delete<void>({ url: route(`/locations/${id}/floor-plan`) });
+  }
+
+  getFloorPlanImageUrl(id: string) {
+    return route(`/locations/${id}/floor-plan/image`);
+  }
+
+  updateFloorPlanPositions(id: string, body: FloorPlanPositionsUpdateRequest) {
+    return this.http.put<FloorPlanPositionsUpdateRequest, void>({
+      url: route(`/locations/${id}/floor-plan/positions`),
+      body,
+    });
   }
 }

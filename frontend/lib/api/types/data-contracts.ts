@@ -711,6 +711,8 @@ export interface ItemSummary {
   assetId: string;
   createdAt: Date | string;
   description: string;
+  floorPlanX: number;
+  floorPlanY: number;
   id: string;
   imageId?: string | null;
   insured: boolean;
@@ -884,6 +886,10 @@ export interface LocationOut {
   children: LocationSummary[];
   createdAt: Date | string;
   description: string;
+  floorPlanMimeType: string;
+  floorPlanPath: string;
+  floorPlanX: number;
+  floorPlanY: number;
   id: string;
   name: string;
   parent: LocationSummary;
@@ -903,6 +909,8 @@ export interface LocationOutCount {
 export interface LocationSummary {
   createdAt: Date | string;
   description: string;
+  floorPlanX: number;
+  floorPlanY: number;
   id: string;
   name: string;
   updatedAt: Date | string;

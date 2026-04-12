@@ -21,7 +21,7 @@ type options struct {
 	autoIncrementAssetID bool
 	currencies           []currencies.Currency
 	notifierConfig       *config.NotifierConf
-	geminiAPIKey         string
+	aiConf               config.AIConf
 }
 
 func WithAutoIncrementAssetID(v bool) func(*options) {
@@ -44,9 +44,9 @@ func WithNotifierConfig(v *config.NotifierConf) func(*options) {
 	}
 }
 
-func WithGeminiAPIKey(v string) func(*options) {
+func WithAIConfig(v config.AIConf) func(*options) {
 	return func(o *options) {
-		o.geminiAPIKey = v
+		o.aiConf = v
 	}
 }
 
@@ -87,7 +87,7 @@ func New(repos *repo.AllRepos, opts ...OptionsFunc) *AllServices {
 		Items: &ItemService{
 			repo:                 repos,
 			autoIncrementAssetID: options.autoIncrementAssetID,
-			geminiAPIKey:         options.geminiAPIKey,
+			aiConf:               options.aiConf,
 		},
 		BackgroundService: &BackgroundService{
 			repos:          repos,
@@ -97,3 +97,4 @@ func New(repos *repo.AllRepos, opts ...OptionsFunc) *AllServices {
 		Currencies: currencies.NewCurrencyService(options.currencies),
 	}
 }
+

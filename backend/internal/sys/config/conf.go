@@ -38,7 +38,11 @@ type Config struct {
 }
 
 type AIConf struct {
+	Provider     string `yaml:"provider"       conf:"default:gemini"` // gemini or openai
 	GeminiAPIKey string `yaml:"gemini_api_key"`
+	OpenAIKey    string `yaml:"openai_key"`
+	OpenAIBaseURL string `yaml:"openai_base_url" conf:"default:https://api.openai.com/v1"`
+	OpenAIModel  string `yaml:"openai_model"    conf:"default:gpt-4o-mini"`
 }
 
 type Options struct {

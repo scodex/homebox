@@ -33,6 +33,7 @@
   import BaseSectionHeader from "@/components/Base/SectionHeader.vue";
   import ItemViewSelectable from "~/components/Item/View/Selectable.vue";
   import LocationCard from "~/components/Location/Card.vue";
+  import FloorPlanViewer from "~/components/Location/FloorPlanViewer.vue";
 
   definePageMeta({
     middleware: ["auth"],
@@ -47,7 +48,7 @@
 
   const locationId = computed<string>(() => route.params.id as string);
 
-  const { data: location } = useAsyncData(locationId.value, async () => {
+  const { data: location, refresh: refreshLocation } = useAsyncData(locationId.value, async () => {
     const { data, error } = await api.locations.get(locationId.value);
     if (error) {
       toast.error(t("locations.toast.failed_load_location"));
@@ -65,6 +66,11 @@
 
     return data;
   });
+
+  async function refreshAll() {
+    await refreshLocation();
+    await refreshItemList();
+  }
 
   const confirm = useConfirm();
 
@@ -251,6 +257,16 @@
       <section v-if="location && items">
         <ItemViewSelectable :items="items" @refresh="refreshItemList" />
       </section>
+
+      <!-- Floor Plan -->
+      <FloorPlanViewer
+        v-if="location"
+        :location-id="locationId"
+        :floor-plan-path="location.floorPlanPath || ''"
+        :children="location.children || []"
+        :items="items || []"
+        @refresh="refreshAll"
+      />
 
       <section v-if="location && location.children.length > 0" class="mt-6">
         <BaseSectionHeader class="mb-5"> {{ $t("locations.child_locations") }} </BaseSectionHeader>

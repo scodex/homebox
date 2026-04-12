@@ -158,6 +158,10 @@ type (
 
 		// Sale details
 		SoldTime time.Time `json:"soldTime"`
+
+		// Floor plan position
+		FloorPlanX float64 `json:"floorPlanX"`
+		FloorPlanY float64 `json:"floorPlanY"`
 	}
 
 	ItemOut struct {
@@ -320,7 +324,7 @@ func (e *ItemsRepository) getOneTx(ctx context.Context, tx *ent.Tx, where ...pre
 		q = e.db.Item.Query().Where(where...)
 	}
 
-	return mapItemOutErr(q.
+	out, err := mapItemOutErr(q.
 		WithFields().
 		WithTag().
 		WithLocation().
@@ -329,6 +333,11 @@ func (e *ItemsRepository) getOneTx(ctx context.Context, tx *ent.Tx, where ...pre
 		WithAttachments().
 		Only(ctx),
 	)
+	if err != nil {
+		return out, err
+	}
+
+	return e.enrichItemOut(ctx, out)
 }
 
 func (e *ItemsRepository) getOne(ctx context.Context, where ...predicate.Item) (ItemOut, error) {
@@ -530,7 +539,7 @@ func (e *ItemsRepository) QueryByGroup(ctx context.Context, gid uuid.UUID, q Ite
 		Page:     q.Page,
 		PageSize: q.PageSize,
 		Total:    count,
-		Items:    items,
+		Items:    e.EnrichWithFloorPlanPositions(ctx, items),
 	}, nil
 }
 
@@ -563,7 +572,7 @@ func (e *ItemsRepository) QueryByAssetID(ctx context.Context, gid uuid.UUID, ass
 		Page:     page,
 		PageSize: pageSize,
 		Total:    len(items),
-		Items:    items,
+		Items:    e.EnrichWithFloorPlanPositions(ctx, items),
 	}, nil
 }
 
@@ -1539,4 +1548,41 @@ func (e *ItemsRepository) Duplicate(ctx context.Context, gid, id uuid.UUID, opti
 
 	// Get the final item with all copied data
 	return e.GetOne(ctx, newItemID)
+}
+
+func (e *ItemsRepository) enrichItemOut(ctx context.Context, out ItemOut) (ItemOut, error) {
+	row := e.db.Sql().QueryRowContext(ctx,
+		`SELECT floor_plan_x, floor_plan_y FROM items WHERE id = $1`, out.ID)
+
+	var x, y float64
+	if err := row.Scan(&x, &y); err == nil {
+		out.FloorPlanX = x
+		out.FloorPlanY = y
+	}
+
+	if out.Parent != nil {
+		parentRow := e.db.Sql().QueryRowContext(ctx,
+			`SELECT floor_plan_x, floor_plan_y FROM items WHERE id = $1`, out.Parent.ID)
+		var px, py float64
+		if err := parentRow.Scan(&px, &py); err == nil {
+			out.Parent.FloorPlanX = px
+			out.Parent.FloorPlanY = py
+		}
+	}
+
+	return out, nil
+}
+
+// EnrichWithFloorPlanPositions loads floor_plan_x/y from raw SQL for each item in the slice.
+func (e *ItemsRepository) EnrichWithFloorPlanPositions(ctx context.Context, items []ItemSummary) []ItemSummary {
+	for i := range items {
+		row := e.db.Sql().QueryRowContext(ctx,
+			`SELECT floor_plan_x, floor_plan_y FROM items WHERE id = $1`, items[i].ID)
+		var x, y float64
+		if err := row.Scan(&x, &y); err == nil {
+			items[i].FloorPlanX = x
+			items[i].FloorPlanY = y
+		}
+	}
+	return items
 }
