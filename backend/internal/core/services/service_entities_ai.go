@@ -276,7 +276,7 @@ func (svc *EntityService) GenerateDescription(ctx context.Context, aiConf config
 	}
 
 	// Find primary photo attachment
-	var primaryAtt *repo.EntityAttachment
+	var primaryAtt *repo.ItemAttachment
 	for i := range entity.Attachments {
 		att := &entity.Attachments[i]
 		if att.Primary && att.Type == "photo" {
