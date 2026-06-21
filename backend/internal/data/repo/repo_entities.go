@@ -153,6 +153,11 @@ type (
 		ParentID     uuid.UUID   `json:"parentId"           extensions:"x-nullable,x-omitempty"`
 		EntityTypeID uuid.UUID   `json:"entityTypeId"       extensions:"x-nullable,x-omitempty"`
 		TagIDs       []uuid.UUID `json:"tagIds"             extensions:"x-nullable,x-omitempty"`
+		Name         *string     `json:"name,omitempty"`
+		Description  *string     `json:"description,omitempty"`
+		SerialNumber *string     `json:"serialNumber,omitempty"`
+		ModelNumber  *string     `json:"modelNumber,omitempty"`
+		Manufacturer *string     `json:"manufacturer,omitempty"`
 	}
 
 	EntitySummary struct {
@@ -1457,6 +1462,32 @@ func (r *EntityRepository) WipeInventory(ctx context.Context, gid uuid.UUID, wip
 	return deleted, nil
 }
 
+// UpdateFloorPlan updates the floor plan fields of an entity.
+func (r *EntityRepository) UpdateFloorPlan(ctx context.Context, gid, id uuid.UUID, path, mimeType string, x, y float64) (EntityOut, error) {
+	ctx, span := entityTracer().Start(ctx, "repo.EntityRepository.UpdateFloorPlan",
+		trace.WithAttributes(
+			attribute.String("group.id", gid.String()),
+			attribute.String("entity.id", id.String()),
+		))
+	defer span.End()
+
+	q := r.db.Entity.Update().
+		Where(entity.ID(id), entity.HasGroupWith(group.ID(gid))).
+		SetFloorPlanPath(path).
+		SetFloorPlanMimeType(mimeType).
+		SetFloorPlanX(x).
+		SetFloorPlanY(y)
+
+	_, err := q.Save(ctx)
+	if err != nil {
+		recordSpanError(span, err)
+		return EntityOut{}, err
+	}
+
+	r.publishMutationEvent(gid)
+	return r.getOne(ctx, entity.ID(id), entity.HasGroupWith(group.ID(gid)))
+}
+
 func (r *EntityRepository) UpdateByGroup(ctx context.Context, gid uuid.UUID, data EntityUpdate) (EntityOut, error) {
 	ctx, span := entityTracer().Start(ctx, "repo.EntityRepository.UpdateByGroup",
 		trace.WithAttributes(
@@ -1903,6 +1934,26 @@ func (r *EntityRepository) Patch(ctx context.Context, gid, id uuid.UUID, data En
 
 	if data.EntityTypeID != uuid.Nil {
 		q.SetEntityTypeID(data.EntityTypeID)
+	}
+
+	if data.Name != nil {
+		q.SetName(*data.Name)
+	}
+
+	if data.Description != nil {
+		q.SetDescription(*data.Description)
+	}
+
+	if data.SerialNumber != nil {
+		q.SetSerialNumber(*data.SerialNumber)
+	}
+
+	if data.ModelNumber != nil {
+		q.SetModelNumber(*data.ModelNumber)
+	}
+
+	if data.Manufacturer != nil {
+		q.SetManufacturer(*data.Manufacturer)
 	}
 
 	_, execSpan := entityTracer().Start(ctx, "repo.EntityRepository.Patch.exec")

@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"context"
 	"errors"
 	"io"
 	"net/http"
@@ -69,7 +68,7 @@ func (ctrl *V1Controller) HandleEntityFloorPlanUpload() errchain.HandlerFunc {
 		}
 
 		// Save floor plan image to blob storage
-		path := "floor-plans/" + id + "/" + uuid.NewString()
+		path := "floor-plans/" + id.String() + "/" + uuid.NewString()
 		
 		bucket, err := blob.OpenBucket(r.Context(), ctrl.repo.Attachments.GetConnString())
 		if err != nil {
@@ -90,12 +89,16 @@ func (ctrl *V1Controller) HandleEntityFloorPlanUpload() errchain.HandlerFunc {
 			return err
 		}
 
-		// Update floor plan path
-		entity.FloorPlanPath = path
-		entity.FloorPlanMimeType = header.Header.Get("Content-Type")
-
 		// Save entity updates
-		updatedEntity, err := ctrl.repo.Entities.Update(r.Context(), auth.GID, entity)
+		updatedEntity, err := ctrl.repo.Entities.UpdateFloorPlan(
+			r.Context(),
+			auth.GID,
+			id,
+			path,
+			header.Header.Get("Content-Type"),
+			entity.FloorPlanX,
+			entity.FloorPlanY,
+		)
 		if err != nil {
 			return err
 		}
@@ -133,11 +136,8 @@ func (ctrl *V1Controller) HandleEntityFloorPlanDelete() errchain.HandlerFunc {
 				_ = bucket.Delete(r.Context(), entity.FloorPlanPath)
 				bucket.Close()
 			}
-			entity.FloorPlanPath = ""
-			entity.FloorPlanMimeType = ""
-			
 			// Save
-			_, err = ctrl.repo.Entities.Update(r.Context(), auth.GID, entity)
+			_, err = ctrl.repo.Entities.UpdateFloorPlan(r.Context(), auth.GID, id, "", "", 0, 0)
 			if err != nil {
 				return err
 			}
@@ -215,27 +215,34 @@ func (ctrl *V1Controller) HandleEntityFloorPlanPositionsUpdate() errchain.Handle
 		auth := services.NewContext(r.Context())
 		var req FloorPlanPositionsUpdateRequest
 
-		if err := validate.BindJSON(r, &req); err != nil {
+		if err := server.Decode(r, &req); err != nil {
+			return err
+		}
+		if err := validate.Check(req); err != nil {
 			return err
 		}
 
 		// Update each entity's coordinates
 		// In the new architecture, both Locations and Items from the request are just Entities.
 		for _, loc := range req.Locations {
-			ent, err := ctrl.repo.Entities.GetOneByGroup(r.Context(), auth.GID, loc.ID)
+			locID, err := uuid.Parse(loc.ID)
+			if err != nil {
+				continue
+			}
+			ent, err := ctrl.repo.Entities.GetOneByGroup(r.Context(), auth.GID, locID)
 			if err == nil {
-				ent.FloorPlanX = loc.X
-				ent.FloorPlanY = loc.Y
-				_, _ = ctrl.repo.Entities.Update(r.Context(), auth.GID, ent)
+				_, _ = ctrl.repo.Entities.UpdateFloorPlan(r.Context(), auth.GID, locID, ent.FloorPlanPath, ent.FloorPlanMimeType, loc.X, loc.Y)
 			}
 		}
 
 		for _, item := range req.Items {
-			ent, err := ctrl.repo.Entities.GetOneByGroup(r.Context(), auth.GID, item.ID)
+			itemID, err := uuid.Parse(item.ID)
+			if err != nil {
+				continue
+			}
+			ent, err := ctrl.repo.Entities.GetOneByGroup(r.Context(), auth.GID, itemID)
 			if err == nil {
-				ent.FloorPlanX = item.X
-				ent.FloorPlanY = item.Y
-				_, _ = ctrl.repo.Entities.Update(r.Context(), auth.GID, ent)
+				_, _ = ctrl.repo.Entities.UpdateFloorPlan(r.Context(), auth.GID, itemID, ent.FloorPlanPath, ent.FloorPlanMimeType, item.X, item.Y)
 			}
 		}
 
