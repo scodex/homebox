@@ -139,6 +139,11 @@ type (
 		// Extras
 		Notes  string            `json:"notes"`
 		Fields []EntityFieldData `json:"fields"`
+
+		FloorPlanPath     string  `json:"floorPlanPath"`
+		FloorPlanMimeType string  `json:"floorPlanMimeType"`
+		FloorPlanX        float64 `json:"floorPlanX"`
+		FloorPlanY        float64 `json:"floorPlanY"`
 	}
 
 	EntityPatch struct {
