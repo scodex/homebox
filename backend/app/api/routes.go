@@ -186,6 +186,13 @@ func (a *app) mountRoutes(r *chi.Mux, chain *errchain.ErrChain, repos *repo.AllR
 		r.Delete("/entities/{id}", chain.ToHandlerFunc(v1Ctrl.HandleEntityDelete(), userMW...))
 		r.Post("/entities/{id}/duplicate", chain.ToHandlerFunc(v1Ctrl.HandleEntityDuplicate(), userMW...))
 		r.Post("/entities/{id}/generate-description", chain.ToHandlerFunc(v1Ctrl.HandleEntityGenerateDescription(), userMW...))
+		
+		// Floor Plan Endpoints
+		r.Post("/entities/{id}/floor-plan", chain.ToHandlerFunc(v1Ctrl.HandleEntityFloorPlanUpload(), userMW...))
+		r.Delete("/entities/{id}/floor-plan", chain.ToHandlerFunc(v1Ctrl.HandleEntityFloorPlanDelete(), userMW...))
+		r.Get("/entities/{id}/floor-plan/image", chain.ToHandlerFunc(v1Ctrl.HandleEntityFloorPlanImage(), userMW...))
+		r.Put("/entities/{id}/floor-plan/positions", chain.ToHandlerFunc(v1Ctrl.HandleEntityFloorPlanPositionsUpdate(), userMW...))
+
 
 		// Entity attachment endpoints
 		r.Post("/entities/{id}/attachments", chain.ToHandlerFunc(v1Ctrl.HandleEntityAttachmentCreate(), userMW...))

@@ -786,6 +786,9 @@ export interface EntityOut {
   fields: EntityFieldData[];
   id: string;
   imageId?: string | null;
+    floorPlanPath?: string;
+    floorPlanX?: number;
+    floorPlanY?: number;
   insured: boolean;
   /** Container-specific (populated when querying locations) */
   itemCount: number;
@@ -841,6 +844,9 @@ export interface EntitySummary {
   entityType?: EntityTypeSummary | null;
   id: string;
   imageId?: string | null;
+    floorPlanPath?: string;
+    floorPlanX?: number;
+    floorPlanY?: number;
   insured: boolean;
   /** Container-specific (populated when querying locations) */
   itemCount: number;

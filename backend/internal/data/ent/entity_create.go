@@ -173,6 +173,62 @@ func (_c *EntityCreate) SetNillableSyncChildEntityLocations(v *bool) *EntityCrea
 	return _c
 }
 
+// SetFloorPlanPath sets the "floor_plan_path" field.
+func (_c *EntityCreate) SetFloorPlanPath(v string) *EntityCreate {
+	_c.mutation.SetFloorPlanPath(v)
+	return _c
+}
+
+// SetNillableFloorPlanPath sets the "floor_plan_path" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableFloorPlanPath(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetFloorPlanPath(*v)
+	}
+	return _c
+}
+
+// SetFloorPlanMimeType sets the "floor_plan_mime_type" field.
+func (_c *EntityCreate) SetFloorPlanMimeType(v string) *EntityCreate {
+	_c.mutation.SetFloorPlanMimeType(v)
+	return _c
+}
+
+// SetNillableFloorPlanMimeType sets the "floor_plan_mime_type" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableFloorPlanMimeType(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetFloorPlanMimeType(*v)
+	}
+	return _c
+}
+
+// SetFloorPlanX sets the "floor_plan_x" field.
+func (_c *EntityCreate) SetFloorPlanX(v float64) *EntityCreate {
+	_c.mutation.SetFloorPlanX(v)
+	return _c
+}
+
+// SetNillableFloorPlanX sets the "floor_plan_x" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableFloorPlanX(v *float64) *EntityCreate {
+	if v != nil {
+		_c.SetFloorPlanX(*v)
+	}
+	return _c
+}
+
+// SetFloorPlanY sets the "floor_plan_y" field.
+func (_c *EntityCreate) SetFloorPlanY(v float64) *EntityCreate {
+	_c.mutation.SetFloorPlanY(v)
+	return _c
+}
+
+// SetNillableFloorPlanY sets the "floor_plan_y" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableFloorPlanY(v *float64) *EntityCreate {
+	if v != nil {
+		_c.SetFloorPlanY(*v)
+	}
+	return _c
+}
+
 // SetSerialNumber sets the "serial_number" field.
 func (_c *EntityCreate) SetSerialNumber(v string) *EntityCreate {
 	_c.mutation.SetSerialNumber(v)
@@ -548,6 +604,14 @@ func (_c *EntityCreate) defaults() {
 		v := entity.DefaultSyncChildEntityLocations
 		_c.mutation.SetSyncChildEntityLocations(v)
 	}
+	if _, ok := _c.mutation.FloorPlanX(); !ok {
+		v := entity.DefaultFloorPlanX
+		_c.mutation.SetFloorPlanX(v)
+	}
+	if _, ok := _c.mutation.FloorPlanY(); !ok {
+		v := entity.DefaultFloorPlanY
+		_c.mutation.SetFloorPlanY(v)
+	}
 	if _, ok := _c.mutation.LifetimeWarranty(); !ok {
 		v := entity.DefaultLifetimeWarranty
 		_c.mutation.SetLifetimeWarranty(v)
@@ -611,6 +675,16 @@ func (_c *EntityCreate) check() error {
 	}
 	if _, ok := _c.mutation.SyncChildEntityLocations(); !ok {
 		return &ValidationError{Name: "sync_child_entity_locations", err: errors.New(`ent: missing required field "Entity.sync_child_entity_locations"`)}
+	}
+	if v, ok := _c.mutation.FloorPlanPath(); ok {
+		if err := entity.FloorPlanPathValidator(v); err != nil {
+			return &ValidationError{Name: "floor_plan_path", err: fmt.Errorf(`ent: validator failed for field "Entity.floor_plan_path": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.FloorPlanMimeType(); ok {
+		if err := entity.FloorPlanMimeTypeValidator(v); err != nil {
+			return &ValidationError{Name: "floor_plan_mime_type", err: fmt.Errorf(`ent: validator failed for field "Entity.floor_plan_mime_type": %w`, err)}
+		}
 	}
 	if v, ok := _c.mutation.SerialNumber(); ok {
 		if err := entity.SerialNumberValidator(v); err != nil {
@@ -730,6 +804,22 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SyncChildEntityLocations(); ok {
 		_spec.SetField(entity.FieldSyncChildEntityLocations, field.TypeBool, value)
 		_node.SyncChildEntityLocations = value
+	}
+	if value, ok := _c.mutation.FloorPlanPath(); ok {
+		_spec.SetField(entity.FieldFloorPlanPath, field.TypeString, value)
+		_node.FloorPlanPath = value
+	}
+	if value, ok := _c.mutation.FloorPlanMimeType(); ok {
+		_spec.SetField(entity.FieldFloorPlanMimeType, field.TypeString, value)
+		_node.FloorPlanMimeType = value
+	}
+	if value, ok := _c.mutation.FloorPlanX(); ok {
+		_spec.SetField(entity.FieldFloorPlanX, field.TypeFloat64, value)
+		_node.FloorPlanX = value
+	}
+	if value, ok := _c.mutation.FloorPlanY(); ok {
+		_spec.SetField(entity.FieldFloorPlanY, field.TypeFloat64, value)
+		_node.FloorPlanY = value
 	}
 	if value, ok := _c.mutation.SerialNumber(); ok {
 		_spec.SetField(entity.FieldSerialNumber, field.TypeString, value)

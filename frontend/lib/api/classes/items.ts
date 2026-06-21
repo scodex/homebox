@@ -239,4 +239,31 @@ export class ItemsApi extends BaseAPI {
   updateLocation(id: string, body: EntityUpdate) {
     return this.http.put<EntityUpdate, EntityOut>({ url: route(`/entities/${id}`), body });
   }
+  uploadFloorPlan(id: string, file: File) {
+    const data = new FormData();
+    data.append("file", file);
+    return this.http.post<FormData, EntityOut>({ url: route(`/entities/${id}/floor-plan`), data });
+  }
+
+  deleteFloorPlan(id: string) {
+    return this.http.delete<void>({ url: route(`/entities/${id}/floor-plan`) });
+  }
+
+  updateFloorPlanPositions(id: string, body: FloorPlanPositionsUpdateRequest) {
+    return this.http.put<FloorPlanPositionsUpdateRequest, void>({
+      url: route(`/entities/${id}/floor-plan/positions`),
+      body,
+    });
+  }
 }
+
+export type FloorPlanPositionUpdate = {
+  id: string;
+  x: number;
+  y: number;
+};
+
+export type FloorPlanPositionsUpdateRequest = {
+  locations: FloorPlanPositionUpdate[];
+  items: FloorPlanPositionUpdate[];
+};

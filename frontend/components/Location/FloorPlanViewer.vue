@@ -2,8 +2,8 @@
   import { ref, computed, onMounted } from "vue";
   import { useI18n } from "vue-i18n";
   import { toast } from "@/components/ui/sonner";
-  import type { LocationSummary, ItemSummary } from "~~/lib/api/types/data-contracts";
-  import type { FloorPlanPositionUpdate, FloorPlanPositionsUpdateRequest } from "~~/lib/api/classes/locations";
+  import type { EntitySummary } from "~~/lib/api/types/data-contracts";
+  import type { FloorPlanPositionUpdate, FloorPlanPositionsUpdateRequest } from "~~/lib/api/classes/items";
   import MdiMapMarkerOutline from "~icons/mdi/map-marker-outline";
   import MdiPackageVariant from "~icons/mdi/package-variant";
   import MdiCursorMove from "~icons/mdi/cursor-move";
@@ -20,8 +20,8 @@
   const props = defineProps<{
     locationId: string;
     floorPlanPath: string;
-    children: LocationSummary[];
-    items: ItemSummary[];
+    children: EntitySummary[];
+    items: EntitySummary[];
   }>();
 
   const emit = defineEmits<{
@@ -40,7 +40,7 @@
 
   const floorPlanImageUrl = computed(() => {
     if (!props.floorPlanPath) return "";
-    return `/api/v1/locations/${props.locationId}/floor-plan/image`;
+    return `/api/v1/entities/${props.locationId}/floor-plan/image`;
   });
 
   function initPositions() {
@@ -142,7 +142,7 @@
     }
 
     const body: FloorPlanPositionsUpdateRequest = { locations, items };
-    const { error } = await api.locations.updateFloorPlanPositions(props.locationId, body);
+    const { error } = await api.items.updateFloorPlanPositions(props.locationId, body);
 
     if (error) {
       toast.error(t("locations.floor_plan.save_error"));
@@ -160,7 +160,7 @@
     if (!target.files || target.files.length === 0) return;
 
     const file = target.files[0];
-    const { error } = await api.locations.uploadFloorPlan(props.locationId, file);
+    const { error } = await api.items.uploadFloorPlan(props.locationId, file);
 
     if (error) {
       toast.error(t("locations.floor_plan.upload_error"));
@@ -173,7 +173,7 @@
   }
 
   async function handleDelete() {
-    const { error } = await api.locations.deleteFloorPlan(props.locationId);
+    const { error } = await api.items.deleteFloorPlan(props.locationId);
 
     if (error) {
       toast.error(t("locations.floor_plan.delete_error"));

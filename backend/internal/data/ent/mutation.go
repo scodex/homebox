@@ -2627,6 +2627,12 @@ type EntityMutation struct {
 	asset_id                    *int64
 	addasset_id                 *int64
 	sync_child_entity_locations *bool
+	floor_plan_path             *string
+	floor_plan_mime_type        *string
+	floor_plan_x                *float64
+	addfloor_plan_x             *float64
+	floor_plan_y                *float64
+	addfloor_plan_y             *float64
 	serial_number               *string
 	model_number                *string
 	manufacturer                *string
@@ -3246,6 +3252,244 @@ func (m *EntityMutation) OldSyncChildEntityLocations(ctx context.Context) (v boo
 // ResetSyncChildEntityLocations resets all changes to the "sync_child_entity_locations" field.
 func (m *EntityMutation) ResetSyncChildEntityLocations() {
 	m.sync_child_entity_locations = nil
+}
+
+// SetFloorPlanPath sets the "floor_plan_path" field.
+func (m *EntityMutation) SetFloorPlanPath(s string) {
+	m.floor_plan_path = &s
+}
+
+// FloorPlanPath returns the value of the "floor_plan_path" field in the mutation.
+func (m *EntityMutation) FloorPlanPath() (r string, exists bool) {
+	v := m.floor_plan_path
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloorPlanPath returns the old "floor_plan_path" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldFloorPlanPath(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloorPlanPath is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloorPlanPath requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloorPlanPath: %w", err)
+	}
+	return oldValue.FloorPlanPath, nil
+}
+
+// ClearFloorPlanPath clears the value of the "floor_plan_path" field.
+func (m *EntityMutation) ClearFloorPlanPath() {
+	m.floor_plan_path = nil
+	m.clearedFields[entity.FieldFloorPlanPath] = struct{}{}
+}
+
+// FloorPlanPathCleared returns if the "floor_plan_path" field was cleared in this mutation.
+func (m *EntityMutation) FloorPlanPathCleared() bool {
+	_, ok := m.clearedFields[entity.FieldFloorPlanPath]
+	return ok
+}
+
+// ResetFloorPlanPath resets all changes to the "floor_plan_path" field.
+func (m *EntityMutation) ResetFloorPlanPath() {
+	m.floor_plan_path = nil
+	delete(m.clearedFields, entity.FieldFloorPlanPath)
+}
+
+// SetFloorPlanMimeType sets the "floor_plan_mime_type" field.
+func (m *EntityMutation) SetFloorPlanMimeType(s string) {
+	m.floor_plan_mime_type = &s
+}
+
+// FloorPlanMimeType returns the value of the "floor_plan_mime_type" field in the mutation.
+func (m *EntityMutation) FloorPlanMimeType() (r string, exists bool) {
+	v := m.floor_plan_mime_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloorPlanMimeType returns the old "floor_plan_mime_type" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldFloorPlanMimeType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloorPlanMimeType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloorPlanMimeType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloorPlanMimeType: %w", err)
+	}
+	return oldValue.FloorPlanMimeType, nil
+}
+
+// ClearFloorPlanMimeType clears the value of the "floor_plan_mime_type" field.
+func (m *EntityMutation) ClearFloorPlanMimeType() {
+	m.floor_plan_mime_type = nil
+	m.clearedFields[entity.FieldFloorPlanMimeType] = struct{}{}
+}
+
+// FloorPlanMimeTypeCleared returns if the "floor_plan_mime_type" field was cleared in this mutation.
+func (m *EntityMutation) FloorPlanMimeTypeCleared() bool {
+	_, ok := m.clearedFields[entity.FieldFloorPlanMimeType]
+	return ok
+}
+
+// ResetFloorPlanMimeType resets all changes to the "floor_plan_mime_type" field.
+func (m *EntityMutation) ResetFloorPlanMimeType() {
+	m.floor_plan_mime_type = nil
+	delete(m.clearedFields, entity.FieldFloorPlanMimeType)
+}
+
+// SetFloorPlanX sets the "floor_plan_x" field.
+func (m *EntityMutation) SetFloorPlanX(f float64) {
+	m.floor_plan_x = &f
+	m.addfloor_plan_x = nil
+}
+
+// FloorPlanX returns the value of the "floor_plan_x" field in the mutation.
+func (m *EntityMutation) FloorPlanX() (r float64, exists bool) {
+	v := m.floor_plan_x
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloorPlanX returns the old "floor_plan_x" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldFloorPlanX(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloorPlanX is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloorPlanX requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloorPlanX: %w", err)
+	}
+	return oldValue.FloorPlanX, nil
+}
+
+// AddFloorPlanX adds f to the "floor_plan_x" field.
+func (m *EntityMutation) AddFloorPlanX(f float64) {
+	if m.addfloor_plan_x != nil {
+		*m.addfloor_plan_x += f
+	} else {
+		m.addfloor_plan_x = &f
+	}
+}
+
+// AddedFloorPlanX returns the value that was added to the "floor_plan_x" field in this mutation.
+func (m *EntityMutation) AddedFloorPlanX() (r float64, exists bool) {
+	v := m.addfloor_plan_x
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFloorPlanX clears the value of the "floor_plan_x" field.
+func (m *EntityMutation) ClearFloorPlanX() {
+	m.floor_plan_x = nil
+	m.addfloor_plan_x = nil
+	m.clearedFields[entity.FieldFloorPlanX] = struct{}{}
+}
+
+// FloorPlanXCleared returns if the "floor_plan_x" field was cleared in this mutation.
+func (m *EntityMutation) FloorPlanXCleared() bool {
+	_, ok := m.clearedFields[entity.FieldFloorPlanX]
+	return ok
+}
+
+// ResetFloorPlanX resets all changes to the "floor_plan_x" field.
+func (m *EntityMutation) ResetFloorPlanX() {
+	m.floor_plan_x = nil
+	m.addfloor_plan_x = nil
+	delete(m.clearedFields, entity.FieldFloorPlanX)
+}
+
+// SetFloorPlanY sets the "floor_plan_y" field.
+func (m *EntityMutation) SetFloorPlanY(f float64) {
+	m.floor_plan_y = &f
+	m.addfloor_plan_y = nil
+}
+
+// FloorPlanY returns the value of the "floor_plan_y" field in the mutation.
+func (m *EntityMutation) FloorPlanY() (r float64, exists bool) {
+	v := m.floor_plan_y
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloorPlanY returns the old "floor_plan_y" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldFloorPlanY(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloorPlanY is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloorPlanY requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloorPlanY: %w", err)
+	}
+	return oldValue.FloorPlanY, nil
+}
+
+// AddFloorPlanY adds f to the "floor_plan_y" field.
+func (m *EntityMutation) AddFloorPlanY(f float64) {
+	if m.addfloor_plan_y != nil {
+		*m.addfloor_plan_y += f
+	} else {
+		m.addfloor_plan_y = &f
+	}
+}
+
+// AddedFloorPlanY returns the value that was added to the "floor_plan_y" field in this mutation.
+func (m *EntityMutation) AddedFloorPlanY() (r float64, exists bool) {
+	v := m.addfloor_plan_y
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFloorPlanY clears the value of the "floor_plan_y" field.
+func (m *EntityMutation) ClearFloorPlanY() {
+	m.floor_plan_y = nil
+	m.addfloor_plan_y = nil
+	m.clearedFields[entity.FieldFloorPlanY] = struct{}{}
+}
+
+// FloorPlanYCleared returns if the "floor_plan_y" field was cleared in this mutation.
+func (m *EntityMutation) FloorPlanYCleared() bool {
+	_, ok := m.clearedFields[entity.FieldFloorPlanY]
+	return ok
+}
+
+// ResetFloorPlanY resets all changes to the "floor_plan_y" field.
+func (m *EntityMutation) ResetFloorPlanY() {
+	m.floor_plan_y = nil
+	m.addfloor_plan_y = nil
+	delete(m.clearedFields, entity.FieldFloorPlanY)
 }
 
 // SetSerialNumber sets the "serial_number" field.
@@ -4307,7 +4551,7 @@ func (m *EntityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 28)
 	if m.created_at != nil {
 		fields = append(fields, entity.FieldCreatedAt)
 	}
@@ -4340,6 +4584,18 @@ func (m *EntityMutation) Fields() []string {
 	}
 	if m.sync_child_entity_locations != nil {
 		fields = append(fields, entity.FieldSyncChildEntityLocations)
+	}
+	if m.floor_plan_path != nil {
+		fields = append(fields, entity.FieldFloorPlanPath)
+	}
+	if m.floor_plan_mime_type != nil {
+		fields = append(fields, entity.FieldFloorPlanMimeType)
+	}
+	if m.floor_plan_x != nil {
+		fields = append(fields, entity.FieldFloorPlanX)
+	}
+	if m.floor_plan_y != nil {
+		fields = append(fields, entity.FieldFloorPlanY)
 	}
 	if m.serial_number != nil {
 		fields = append(fields, entity.FieldSerialNumber)
@@ -4410,6 +4666,14 @@ func (m *EntityMutation) Field(name string) (ent.Value, bool) {
 		return m.AssetID()
 	case entity.FieldSyncChildEntityLocations:
 		return m.SyncChildEntityLocations()
+	case entity.FieldFloorPlanPath:
+		return m.FloorPlanPath()
+	case entity.FieldFloorPlanMimeType:
+		return m.FloorPlanMimeType()
+	case entity.FieldFloorPlanX:
+		return m.FloorPlanX()
+	case entity.FieldFloorPlanY:
+		return m.FloorPlanY()
 	case entity.FieldSerialNumber:
 		return m.SerialNumber()
 	case entity.FieldModelNumber:
@@ -4467,6 +4731,14 @@ func (m *EntityMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldAssetID(ctx)
 	case entity.FieldSyncChildEntityLocations:
 		return m.OldSyncChildEntityLocations(ctx)
+	case entity.FieldFloorPlanPath:
+		return m.OldFloorPlanPath(ctx)
+	case entity.FieldFloorPlanMimeType:
+		return m.OldFloorPlanMimeType(ctx)
+	case entity.FieldFloorPlanX:
+		return m.OldFloorPlanX(ctx)
+	case entity.FieldFloorPlanY:
+		return m.OldFloorPlanY(ctx)
 	case entity.FieldSerialNumber:
 		return m.OldSerialNumber(ctx)
 	case entity.FieldModelNumber:
@@ -4579,6 +4851,34 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSyncChildEntityLocations(v)
 		return nil
+	case entity.FieldFloorPlanPath:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloorPlanPath(v)
+		return nil
+	case entity.FieldFloorPlanMimeType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloorPlanMimeType(v)
+		return nil
+	case entity.FieldFloorPlanX:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloorPlanX(v)
+		return nil
+	case entity.FieldFloorPlanY:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloorPlanY(v)
+		return nil
 	case entity.FieldSerialNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -4684,6 +4984,12 @@ func (m *EntityMutation) AddedFields() []string {
 	if m.addasset_id != nil {
 		fields = append(fields, entity.FieldAssetID)
 	}
+	if m.addfloor_plan_x != nil {
+		fields = append(fields, entity.FieldFloorPlanX)
+	}
+	if m.addfloor_plan_y != nil {
+		fields = append(fields, entity.FieldFloorPlanY)
+	}
 	if m.addpurchase_price != nil {
 		fields = append(fields, entity.FieldPurchasePrice)
 	}
@@ -4702,6 +5008,10 @@ func (m *EntityMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedQuantity()
 	case entity.FieldAssetID:
 		return m.AddedAssetID()
+	case entity.FieldFloorPlanX:
+		return m.AddedFloorPlanX()
+	case entity.FieldFloorPlanY:
+		return m.AddedFloorPlanY()
 	case entity.FieldPurchasePrice:
 		return m.AddedPurchasePrice()
 	case entity.FieldSoldPrice:
@@ -4728,6 +5038,20 @@ func (m *EntityMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAssetID(v)
+		return nil
+	case entity.FieldFloorPlanX:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFloorPlanX(v)
+		return nil
+	case entity.FieldFloorPlanY:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFloorPlanY(v)
 		return nil
 	case entity.FieldPurchasePrice:
 		v, ok := value.(float64)
@@ -4759,6 +5083,18 @@ func (m *EntityMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(entity.FieldNotes) {
 		fields = append(fields, entity.FieldNotes)
+	}
+	if m.FieldCleared(entity.FieldFloorPlanPath) {
+		fields = append(fields, entity.FieldFloorPlanPath)
+	}
+	if m.FieldCleared(entity.FieldFloorPlanMimeType) {
+		fields = append(fields, entity.FieldFloorPlanMimeType)
+	}
+	if m.FieldCleared(entity.FieldFloorPlanX) {
+		fields = append(fields, entity.FieldFloorPlanX)
+	}
+	if m.FieldCleared(entity.FieldFloorPlanY) {
+		fields = append(fields, entity.FieldFloorPlanY)
 	}
 	if m.FieldCleared(entity.FieldSerialNumber) {
 		fields = append(fields, entity.FieldSerialNumber)
@@ -4812,6 +5148,18 @@ func (m *EntityMutation) ClearField(name string) error {
 		return nil
 	case entity.FieldNotes:
 		m.ClearNotes()
+		return nil
+	case entity.FieldFloorPlanPath:
+		m.ClearFloorPlanPath()
+		return nil
+	case entity.FieldFloorPlanMimeType:
+		m.ClearFloorPlanMimeType()
+		return nil
+	case entity.FieldFloorPlanX:
+		m.ClearFloorPlanX()
+		return nil
+	case entity.FieldFloorPlanY:
+		m.ClearFloorPlanY()
 		return nil
 	case entity.FieldSerialNumber:
 		m.ClearSerialNumber()
@@ -4883,6 +5231,18 @@ func (m *EntityMutation) ResetField(name string) error {
 		return nil
 	case entity.FieldSyncChildEntityLocations:
 		m.ResetSyncChildEntityLocations()
+		return nil
+	case entity.FieldFloorPlanPath:
+		m.ResetFloorPlanPath()
+		return nil
+	case entity.FieldFloorPlanMimeType:
+		m.ResetFloorPlanMimeType()
+		return nil
+	case entity.FieldFloorPlanX:
+		m.ResetFloorPlanX()
+		return nil
+	case entity.FieldFloorPlanY:
+		m.ResetFloorPlanY()
 		return nil
 	case entity.FieldSerialNumber:
 		m.ResetSerialNumber()

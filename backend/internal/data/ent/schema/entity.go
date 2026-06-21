@@ -54,6 +54,21 @@ func (Entity) Fields() []ent.Field {
 			Default(false),
 
 		// ------------------------------------
+		// Floor Plan fields
+		field.String("floor_plan_path").
+			MaxLen(1000).
+			Optional(),
+		field.String("floor_plan_mime_type").
+			MaxLen(255).
+			Optional(),
+		field.Float("floor_plan_x").
+			Default(0).
+			Optional(),
+		field.Float("floor_plan_y").
+			Default(0).
+			Optional(),
+
+		// ------------------------------------
 		// item identification
 		field.String("serial_number").
 			MaxLen(255).

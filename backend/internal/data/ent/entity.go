@@ -42,6 +42,14 @@ type Entity struct {
 	AssetID int64 `json:"asset_id,omitempty"`
 	// SyncChildEntityLocations holds the value of the "sync_child_entity_locations" field.
 	SyncChildEntityLocations bool `json:"sync_child_entity_locations,omitempty"`
+	// FloorPlanPath holds the value of the "floor_plan_path" field.
+	FloorPlanPath string `json:"floor_plan_path,omitempty"`
+	// FloorPlanMimeType holds the value of the "floor_plan_mime_type" field.
+	FloorPlanMimeType string `json:"floor_plan_mime_type,omitempty"`
+	// FloorPlanX holds the value of the "floor_plan_x" field.
+	FloorPlanX float64 `json:"floor_plan_x,omitempty"`
+	// FloorPlanY holds the value of the "floor_plan_y" field.
+	FloorPlanY float64 `json:"floor_plan_y,omitempty"`
 	// SerialNumber holds the value of the "serial_number" field.
 	SerialNumber string `json:"serial_number,omitempty"`
 	// ModelNumber holds the value of the "model_number" field.
@@ -185,11 +193,11 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entity.FieldInsured, entity.FieldArchived, entity.FieldSyncChildEntityLocations, entity.FieldLifetimeWarranty:
 			values[i] = new(sql.NullBool)
-		case entity.FieldQuantity, entity.FieldPurchasePrice, entity.FieldSoldPrice:
+		case entity.FieldQuantity, entity.FieldFloorPlanX, entity.FieldFloorPlanY, entity.FieldPurchasePrice, entity.FieldSoldPrice:
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldAssetID:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldName, entity.FieldDescription, entity.FieldImportRef, entity.FieldNotes, entity.FieldSerialNumber, entity.FieldModelNumber, entity.FieldManufacturer, entity.FieldWarrantyDetails, entity.FieldPurchaseFrom, entity.FieldSoldTo, entity.FieldSoldNotes:
+		case entity.FieldName, entity.FieldDescription, entity.FieldImportRef, entity.FieldNotes, entity.FieldFloorPlanPath, entity.FieldFloorPlanMimeType, entity.FieldSerialNumber, entity.FieldModelNumber, entity.FieldManufacturer, entity.FieldWarrantyDetails, entity.FieldPurchaseFrom, entity.FieldSoldTo, entity.FieldSoldNotes:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldWarrantyExpires, entity.FieldPurchaseDate, entity.FieldSoldDate:
 			values[i] = new(sql.NullTime)
@@ -287,6 +295,30 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sync_child_entity_locations", values[i])
 			} else if value.Valid {
 				_m.SyncChildEntityLocations = value.Bool
+			}
+		case entity.FieldFloorPlanPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field floor_plan_path", values[i])
+			} else if value.Valid {
+				_m.FloorPlanPath = value.String
+			}
+		case entity.FieldFloorPlanMimeType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field floor_plan_mime_type", values[i])
+			} else if value.Valid {
+				_m.FloorPlanMimeType = value.String
+			}
+		case entity.FieldFloorPlanX:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field floor_plan_x", values[i])
+			} else if value.Valid {
+				_m.FloorPlanX = value.Float64
+			}
+		case entity.FieldFloorPlanY:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field floor_plan_y", values[i])
+			} else if value.Valid {
+				_m.FloorPlanY = value.Float64
 			}
 		case entity.FieldSerialNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -495,6 +527,18 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sync_child_entity_locations=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SyncChildEntityLocations))
+	builder.WriteString(", ")
+	builder.WriteString("floor_plan_path=")
+	builder.WriteString(_m.FloorPlanPath)
+	builder.WriteString(", ")
+	builder.WriteString("floor_plan_mime_type=")
+	builder.WriteString(_m.FloorPlanMimeType)
+	builder.WriteString(", ")
+	builder.WriteString("floor_plan_x=")
+	builder.WriteString(fmt.Sprintf("%v", _m.FloorPlanX))
+	builder.WriteString(", ")
+	builder.WriteString("floor_plan_y=")
+	builder.WriteString(fmt.Sprintf("%v", _m.FloorPlanY))
 	builder.WriteString(", ")
 	builder.WriteString("serial_number=")
 	builder.WriteString(_m.SerialNumber)

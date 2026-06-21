@@ -111,6 +111,26 @@ func SyncChildEntityLocations(v bool) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldSyncChildEntityLocations, v))
 }
 
+// FloorPlanPath applies equality check predicate on the "floor_plan_path" field. It's identical to FloorPlanPathEQ.
+func FloorPlanPath(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanPath, v))
+}
+
+// FloorPlanMimeType applies equality check predicate on the "floor_plan_mime_type" field. It's identical to FloorPlanMimeTypeEQ.
+func FloorPlanMimeType(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanX applies equality check predicate on the "floor_plan_x" field. It's identical to FloorPlanXEQ.
+func FloorPlanX(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanX, v))
+}
+
+// FloorPlanY applies equality check predicate on the "floor_plan_y" field. It's identical to FloorPlanYEQ.
+func FloorPlanY(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanY, v))
+}
+
 // SerialNumber applies equality check predicate on the "serial_number" field. It's identical to SerialNumberEQ.
 func SerialNumber(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldSerialNumber, v))
@@ -654,6 +674,256 @@ func SyncChildEntityLocationsEQ(v bool) predicate.Entity {
 // SyncChildEntityLocationsNEQ applies the NEQ predicate on the "sync_child_entity_locations" field.
 func SyncChildEntityLocationsNEQ(v bool) predicate.Entity {
 	return predicate.Entity(sql.FieldNEQ(FieldSyncChildEntityLocations, v))
+}
+
+// FloorPlanPathEQ applies the EQ predicate on the "floor_plan_path" field.
+func FloorPlanPathEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathNEQ applies the NEQ predicate on the "floor_plan_path" field.
+func FloorPlanPathNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathIn applies the In predicate on the "floor_plan_path" field.
+func FloorPlanPathIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldFloorPlanPath, vs...))
+}
+
+// FloorPlanPathNotIn applies the NotIn predicate on the "floor_plan_path" field.
+func FloorPlanPathNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldFloorPlanPath, vs...))
+}
+
+// FloorPlanPathGT applies the GT predicate on the "floor_plan_path" field.
+func FloorPlanPathGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathGTE applies the GTE predicate on the "floor_plan_path" field.
+func FloorPlanPathGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathLT applies the LT predicate on the "floor_plan_path" field.
+func FloorPlanPathLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathLTE applies the LTE predicate on the "floor_plan_path" field.
+func FloorPlanPathLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathContains applies the Contains predicate on the "floor_plan_path" field.
+func FloorPlanPathContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathHasPrefix applies the HasPrefix predicate on the "floor_plan_path" field.
+func FloorPlanPathHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathHasSuffix applies the HasSuffix predicate on the "floor_plan_path" field.
+func FloorPlanPathHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathIsNil applies the IsNil predicate on the "floor_plan_path" field.
+func FloorPlanPathIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldFloorPlanPath))
+}
+
+// FloorPlanPathNotNil applies the NotNil predicate on the "floor_plan_path" field.
+func FloorPlanPathNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldFloorPlanPath))
+}
+
+// FloorPlanPathEqualFold applies the EqualFold predicate on the "floor_plan_path" field.
+func FloorPlanPathEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldFloorPlanPath, v))
+}
+
+// FloorPlanPathContainsFold applies the ContainsFold predicate on the "floor_plan_path" field.
+func FloorPlanPathContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldFloorPlanPath, v))
+}
+
+// FloorPlanMimeTypeEQ applies the EQ predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeNEQ applies the NEQ predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeIn applies the In predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldFloorPlanMimeType, vs...))
+}
+
+// FloorPlanMimeTypeNotIn applies the NotIn predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldFloorPlanMimeType, vs...))
+}
+
+// FloorPlanMimeTypeGT applies the GT predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeGTE applies the GTE predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeLT applies the LT predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeLTE applies the LTE predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeContains applies the Contains predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeHasPrefix applies the HasPrefix predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeHasSuffix applies the HasSuffix predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeIsNil applies the IsNil predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldFloorPlanMimeType))
+}
+
+// FloorPlanMimeTypeNotNil applies the NotNil predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldFloorPlanMimeType))
+}
+
+// FloorPlanMimeTypeEqualFold applies the EqualFold predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanMimeTypeContainsFold applies the ContainsFold predicate on the "floor_plan_mime_type" field.
+func FloorPlanMimeTypeContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldFloorPlanMimeType, v))
+}
+
+// FloorPlanXEQ applies the EQ predicate on the "floor_plan_x" field.
+func FloorPlanXEQ(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanX, v))
+}
+
+// FloorPlanXNEQ applies the NEQ predicate on the "floor_plan_x" field.
+func FloorPlanXNEQ(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldFloorPlanX, v))
+}
+
+// FloorPlanXIn applies the In predicate on the "floor_plan_x" field.
+func FloorPlanXIn(vs ...float64) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldFloorPlanX, vs...))
+}
+
+// FloorPlanXNotIn applies the NotIn predicate on the "floor_plan_x" field.
+func FloorPlanXNotIn(vs ...float64) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldFloorPlanX, vs...))
+}
+
+// FloorPlanXGT applies the GT predicate on the "floor_plan_x" field.
+func FloorPlanXGT(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldFloorPlanX, v))
+}
+
+// FloorPlanXGTE applies the GTE predicate on the "floor_plan_x" field.
+func FloorPlanXGTE(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldFloorPlanX, v))
+}
+
+// FloorPlanXLT applies the LT predicate on the "floor_plan_x" field.
+func FloorPlanXLT(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldFloorPlanX, v))
+}
+
+// FloorPlanXLTE applies the LTE predicate on the "floor_plan_x" field.
+func FloorPlanXLTE(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldFloorPlanX, v))
+}
+
+// FloorPlanXIsNil applies the IsNil predicate on the "floor_plan_x" field.
+func FloorPlanXIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldFloorPlanX))
+}
+
+// FloorPlanXNotNil applies the NotNil predicate on the "floor_plan_x" field.
+func FloorPlanXNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldFloorPlanX))
+}
+
+// FloorPlanYEQ applies the EQ predicate on the "floor_plan_y" field.
+func FloorPlanYEQ(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldFloorPlanY, v))
+}
+
+// FloorPlanYNEQ applies the NEQ predicate on the "floor_plan_y" field.
+func FloorPlanYNEQ(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldFloorPlanY, v))
+}
+
+// FloorPlanYIn applies the In predicate on the "floor_plan_y" field.
+func FloorPlanYIn(vs ...float64) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldFloorPlanY, vs...))
+}
+
+// FloorPlanYNotIn applies the NotIn predicate on the "floor_plan_y" field.
+func FloorPlanYNotIn(vs ...float64) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldFloorPlanY, vs...))
+}
+
+// FloorPlanYGT applies the GT predicate on the "floor_plan_y" field.
+func FloorPlanYGT(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldFloorPlanY, v))
+}
+
+// FloorPlanYGTE applies the GTE predicate on the "floor_plan_y" field.
+func FloorPlanYGTE(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldFloorPlanY, v))
+}
+
+// FloorPlanYLT applies the LT predicate on the "floor_plan_y" field.
+func FloorPlanYLT(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldFloorPlanY, v))
+}
+
+// FloorPlanYLTE applies the LTE predicate on the "floor_plan_y" field.
+func FloorPlanYLTE(v float64) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldFloorPlanY, v))
+}
+
+// FloorPlanYIsNil applies the IsNil predicate on the "floor_plan_y" field.
+func FloorPlanYIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldFloorPlanY))
+}
+
+// FloorPlanYNotNil applies the NotNil predicate on the "floor_plan_y" field.
+func FloorPlanYNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldFloorPlanY))
 }
 
 // SerialNumberEQ applies the EQ predicate on the "serial_number" field.

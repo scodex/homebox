@@ -46,6 +46,7 @@
   import DetailsSection from "~/components/global/DetailsSection/DetailsSection.vue";
   import ItemAttachmentsList from "~/components/Item/AttachmentsList.vue";
   import ItemViewSelectable from "~/components/Item/View/Selectable.vue";
+  import FloorPlanViewer from "~/components/Location/FloorPlanViewer.vue";
 
   const { t } = useI18n();
 
@@ -818,6 +819,15 @@
       <div class="space-y-6">
         <!-- this renders the other pages content -->
         <NuxtPage :item="item" :page-key="itemId" />
+
+        <FloorPlanViewer
+          v-if="!hasNested && (item.floorPlanPath || item.entityType?.isLocation)"
+          :location-id="item.id"
+          :floor-plan-path="item.floorPlanPath || ''"
+          :children="items?.filter(i => i.entityType?.isLocation) || []"
+          :items="items?.filter(i => !i.entityType?.isLocation) || []"
+          @refresh="refresh"
+        />
 
         <!-- anything in this is not rendered if on another page -->
         <BaseCard v-if="!hasNested" collapsable>

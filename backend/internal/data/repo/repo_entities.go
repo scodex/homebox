@@ -163,6 +163,11 @@ type (
 		UpdatedAt   time.Time `json:"updatedAt"`
 
 		PurchasePrice float64 `json:"purchasePrice"`
+		
+		FloorPlanPath     string  `json:"floorPlanPath,omitempty"`
+		FloorPlanMimeType string  `json:"floorPlanMimeType,omitempty"`
+		FloorPlanX        float64 `json:"floorPlanX,omitempty"`
+		FloorPlanY        float64 `json:"floorPlanY,omitempty"`
 
 		// Edges
 		Parent     *EntitySummary     `json:"parent,omitempty"     extensions:"x-nullable,x-omitempty"`
@@ -264,6 +269,10 @@ func mapEntitySummary(e *ent.Entity) EntitySummary {
 		UpdatedAt:     e.UpdatedAt,
 		Archived:      e.Archived,
 		PurchasePrice: e.PurchasePrice,
+		FloorPlanPath:     e.FloorPlanPath,
+		FloorPlanMimeType: e.FloorPlanMimeType,
+		FloorPlanX:        e.FloorPlanX,
+		FloorPlanY:        e.FloorPlanY,
 
 		// Edges
 		Parent:     parent,
@@ -1497,6 +1506,10 @@ func (r *EntityRepository) UpdateByGroup(ctx context.Context, gid uuid.UUID, dat
 		SetInsured(data.Insured).
 		SetWarrantyDetails(data.WarrantyDetails).
 		SetQuantity(data.Quantity).
+		SetFloorPlanPath(data.FloorPlanPath).
+		SetFloorPlanMimeType(data.FloorPlanMimeType).
+		SetFloorPlanX(data.FloorPlanX).
+		SetFloorPlanY(data.FloorPlanY).
 		SetAssetID(int64(data.AssetID)).
 		SetSyncChildEntityLocations(data.SyncChildEntityLocations)
 

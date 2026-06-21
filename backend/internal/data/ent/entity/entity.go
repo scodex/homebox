@@ -37,6 +37,14 @@ const (
 	FieldAssetID = "asset_id"
 	// FieldSyncChildEntityLocations holds the string denoting the sync_child_entity_locations field in the database.
 	FieldSyncChildEntityLocations = "sync_child_entity_locations"
+	// FieldFloorPlanPath holds the string denoting the floor_plan_path field in the database.
+	FieldFloorPlanPath = "floor_plan_path"
+	// FieldFloorPlanMimeType holds the string denoting the floor_plan_mime_type field in the database.
+	FieldFloorPlanMimeType = "floor_plan_mime_type"
+	// FieldFloorPlanX holds the string denoting the floor_plan_x field in the database.
+	FieldFloorPlanX = "floor_plan_x"
+	// FieldFloorPlanY holds the string denoting the floor_plan_y field in the database.
+	FieldFloorPlanY = "floor_plan_y"
 	// FieldSerialNumber holds the string denoting the serial_number field in the database.
 	FieldSerialNumber = "serial_number"
 	// FieldModelNumber holds the string denoting the model_number field in the database.
@@ -145,6 +153,10 @@ var Columns = []string{
 	FieldArchived,
 	FieldAssetID,
 	FieldSyncChildEntityLocations,
+	FieldFloorPlanPath,
+	FieldFloorPlanMimeType,
+	FieldFloorPlanX,
+	FieldFloorPlanY,
 	FieldSerialNumber,
 	FieldModelNumber,
 	FieldManufacturer,
@@ -214,6 +226,14 @@ var (
 	DefaultAssetID int64
 	// DefaultSyncChildEntityLocations holds the default value on creation for the "sync_child_entity_locations" field.
 	DefaultSyncChildEntityLocations bool
+	// FloorPlanPathValidator is a validator for the "floor_plan_path" field. It is called by the builders before save.
+	FloorPlanPathValidator func(string) error
+	// FloorPlanMimeTypeValidator is a validator for the "floor_plan_mime_type" field. It is called by the builders before save.
+	FloorPlanMimeTypeValidator func(string) error
+	// DefaultFloorPlanX holds the default value on creation for the "floor_plan_x" field.
+	DefaultFloorPlanX float64
+	// DefaultFloorPlanY holds the default value on creation for the "floor_plan_y" field.
+	DefaultFloorPlanY float64
 	// SerialNumberValidator is a validator for the "serial_number" field. It is called by the builders before save.
 	SerialNumberValidator func(string) error
 	// ModelNumberValidator is a validator for the "model_number" field. It is called by the builders before save.
@@ -295,6 +315,26 @@ func ByAssetID(opts ...sql.OrderTermOption) OrderOption {
 // BySyncChildEntityLocations orders the results by the sync_child_entity_locations field.
 func BySyncChildEntityLocations(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSyncChildEntityLocations, opts...).ToFunc()
+}
+
+// ByFloorPlanPath orders the results by the floor_plan_path field.
+func ByFloorPlanPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFloorPlanPath, opts...).ToFunc()
+}
+
+// ByFloorPlanMimeType orders the results by the floor_plan_mime_type field.
+func ByFloorPlanMimeType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFloorPlanMimeType, opts...).ToFunc()
+}
+
+// ByFloorPlanX orders the results by the floor_plan_x field.
+func ByFloorPlanX(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFloorPlanX, opts...).ToFunc()
+}
+
+// ByFloorPlanY orders the results by the floor_plan_y field.
+func ByFloorPlanY(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFloorPlanY, opts...).ToFunc()
 }
 
 // BySerialNumber orders the results by the serial_number field.
