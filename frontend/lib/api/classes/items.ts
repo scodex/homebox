@@ -1,4 +1,4 @@
-import { BaseAPI, route } from "../base";
+import { BaseAPI, parseDate, route } from "../base";
 import type {
   EntityCreate,
   EntityListResult,
@@ -174,8 +174,8 @@ export class ItemsApi extends BaseAPI {
   }
 
   async generateDescription(id: string, overwrite: boolean) {
-    const resp = await this.http.post<void, ItemOut>({
-      url: route(`/items/${id}/generate-description`, { overwrite: overwrite.toString() }),
+    const resp = await this.http.post<void, EntityOut>({
+      url: route(`/entities/${id}/generate-description`, { overwrite: overwrite.toString() }),
     });
 
     if (!resp.data) {
