@@ -11,6 +11,7 @@
   import MdiPlusBoxMultipleOutline from "~icons/mdi/plus-box-multiple-outline";
   import MdiContentSaveEdit from "~icons/mdi/content-save-edit";
   import MdiDotsVertical from "~icons/mdi/dots-vertical";
+  import MdiAutoFix from "~icons/mdi/auto-fix";
   import { Separator } from "@/components/ui/separator";
   import {
     DropdownMenu,
@@ -70,6 +71,27 @@
   const hasNested = computed<boolean>(() => {
     return route.fullPath.split("/").at(-1) !== itemId.value;
   });
+
+  const isGeneratingDescription = ref(false);
+  const overwriteDescription = ref(false);
+
+  async function generateDescription() {
+    if (!item.value) return;
+
+    isGeneratingDescription.value = true;
+    try {
+      const { data, error } = await api.items.generateDescription(itemId.value, overwriteDescription.value);
+      if (error) {
+        toast.error(t("items.toast.failed_generate_description"));
+        return;
+      }
+      item.value = data;
+      toast.success(t("items.toast.description_generated"));
+    } finally {
+      isGeneratingDescription.value = false;
+      closeDialog(DialogID.GenerateDescriptionAI);
+    }
+  }
 
   const { data: item, refresh } = useAsyncData(itemId.value, async () => {
     const { data, error } = await api.items.get(itemId.value);
@@ -652,6 +674,33 @@
       </DialogContent>
     </Dialog>
 
+    <Dialog :dialog-id="DialogID.GenerateDescriptionAI">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{{ $t("items.generate_description_ai") }}</DialogTitle>
+        </DialogHeader>
+        <div class="space-y-4 py-4">
+          <p class="text-sm text-muted-foreground">
+            {{ $t("items.generate_description_ai_help") }}
+          </p>
+          <div class="flex items-center space-x-2">
+            <Switch id="overwrite-description" v-model="overwriteDescription" />
+            <Label for="overwrite-description">{{ $t("items.overwrite_description") }}</Label>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" @click="closeDialog(DialogID.GenerateDescriptionAI)">
+            {{ $t("global.cancel") }}
+          </Button>
+          <Button :disabled="isGeneratingDescription" @click="generateDescription">
+            <MdiAutoFix v-if="!isGeneratingDescription" class="mr-2 size-4" />
+            <span v-else class="mr-2 size-4 animate-spin">...</span>
+            {{ $t("items.generate") }}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
     <section>
       <Card class="p-3">
         <header :class="{ 'mb-2': item.description }">
@@ -726,6 +775,11 @@
                   <DropdownMenuItem @click="saveAsTemplate">
                     <MdiContentSaveEdit class="mr-2 size-4" />
                     {{ $t("components.template.save_as_template") }}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem @click="openDialog(DialogID.GenerateDescriptionAI)">
+                    <MdiAutoFix class="mr-2 size-4" />
+                    {{ $t("items.generate_description_ai") }}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem class="text-destructive focus:text-destructive" @click="deleteItem">

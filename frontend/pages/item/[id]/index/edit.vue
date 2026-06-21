@@ -198,7 +198,7 @@
       type: "markdown",
       label: "items.description",
       ref: "description",
-      maxLength: 1000,
+      maxLength: 10000,
     },
     {
       type: "text",
@@ -754,7 +754,7 @@
               <!-- <FormSelect v-model:value="field.type" label="Field Type" :items="fieldTypes" value-key="value" /> -->
               <FormTextField v-model="field.name" :label="$t('global.name')" />
               <div class="col-span-3 flex items-end">
-                <FormTextField v-model="field.textValue" :label="$t('global.value')" :max-length="500" />
+                <FormTextField v-model="field.textValue" :label="$t('global.value')" :max-length="5000" />
                 <Tooltip>
                   <TooltipTrigger as-child>
                     <Button size="icon" variant="destructive" class="ml-2" @click="item.fields.splice(idx, 1)">

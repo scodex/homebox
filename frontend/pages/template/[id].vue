@@ -155,7 +155,7 @@
         <FormTextArea
           v-model="updateData.description"
           :label="$t('components.template.form.template_description')"
-          :max-length="1000"
+          :max-length="10000"
         />
 
         <Separator class="my-2" />
@@ -169,7 +169,7 @@
           <FormTextArea
             v-model="updateData.defaultDescription"
             :label="$t('components.template.form.item_description')"
-            :max-length="1000"
+            :max-length="10000"
           />
           <div class="grid grid-cols-2 gap-2">
             <FormTextField

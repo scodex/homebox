@@ -31,6 +31,7 @@ type options struct {
 	pubSubConn           string
 	dialect              string
 	mailer               *mailer.Mailer
+	aiConf               config.AIConf
 }
 
 func WithAutoIncrementAssetID(v bool) func(*options) {
@@ -74,6 +75,12 @@ func WithMailer(m *mailer.Mailer) func(*options) {
 	}
 }
 
+func WithAIConfig(v config.AIConf) func(*options) {
+	return func(o *options) {
+		o.aiConf = v
+	}
+}
+
 // defaultNotifierConf returns a NotifierConf with safe defaults matching the conf tags.
 // This ensures SSRF protections are enabled when WithNotifierConfig is not provided.
 func defaultNotifierConf() *config.NotifierConf {
@@ -112,6 +119,7 @@ func New(repos *repo.AllRepos, opts ...OptionsFunc) *AllServices {
 		Entities: &EntityService{
 			repo:                 repos,
 			autoIncrementAssetID: options.autoIncrementAssetID,
+			aiConf:               options.aiConf,
 		},
 		BackgroundService: &BackgroundService{
 			repos:          repos,
@@ -129,3 +137,4 @@ func New(repos *repo.AllRepos, opts ...OptionsFunc) *AllServices {
 		Currencies: currencies.NewCurrencyService(options.currencies),
 	}
 }
+

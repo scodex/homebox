@@ -43,7 +43,7 @@ type (
 
 	EntityTemplateCreate struct {
 		Name        string `json:"name"        validate:"required,min=1,max=255"`
-		Description string `json:"description" validate:"max=1000"`
+		Description string `json:"description" validate:"max=10000"`
 		Notes       string `json:"notes"       validate:"max=1000"`
 
 		// Default values for entities
@@ -72,7 +72,7 @@ type (
 	EntityTemplateUpdate struct {
 		ID          uuid.UUID `json:"id"`
 		Name        string    `json:"name"        validate:"required,min=1,max=255"`
-		Description string    `json:"description" validate:"max=1000"`
+		Description string    `json:"description" validate:"max=10000"`
 		Notes       string    `json:"notes"       validate:"max=1000"`
 
 		// Default values for entities

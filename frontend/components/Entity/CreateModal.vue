@@ -180,7 +180,7 @@
             type: t(selectedEntityType ? selectedEntityType.name : 'global.entity'),
           })
         "
-        :max-length="1000"
+        :max-length="10000"
       />
       <TagSelector v-model="form.tags" :tags="tags ?? []" />
       <PhotoUploader

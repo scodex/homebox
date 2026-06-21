@@ -39,7 +39,43 @@ HomeBox is the inventory and organization system built for the Home User! With a
 - 📸 Image Upload - Upload images of your items to make it easy to identify them.
 - 📄 Document and Warranty Tracking - Keep track of important documents and warranties for your items.
 - 💰 Purchase & Maintenance Tracking - Track purchase dates, prices, and maintenance schedules for your items.
+- 🤖 AI Item Recognition - Automatically extract item details (name, description, serial numbers, labels, barcodes/QR-codes) from photos using Google Gemini.
 - 📱 Responsive Design - Homebox is designed to work on any device, including desktops, tablets, and smartphones.
+
+## AI Configuration (Optional)
+
+Homebox supports automated item recognition using multiple AI providers. The AI analyzes the item's primary photo and automatically populates name, description, serial/model numbers, manufacturer, barcodes/QR-codes, and tags.
+
+### Supported Providers
+
+| Provider | Base URL | Example Model |
+|---|---|---|
+| **Google Gemini** (default) | *(uses Google SDK)* | `gemini-2.0-flash` |
+| **OpenAI** | `https://api.openai.com/v1` | `gpt-4o-mini` |
+| **DeepSeek** | `https://api.deepseek.com/v1` | `deepseek-chat` |
+| **OpenRouter** | `https://openrouter.ai/api/v1` | `google/gemini-2.0-flash-exp:free` |
+| **Ollama** (local) | `http://localhost:11434/v1` | `llava` |
+
+### Configuration
+
+**Option 1: Google Gemini (Default)**
+
+Get a [Gemini API Key](https://aistudio.google.com/) and set:
+```bash
+HBOX_AI_GEMINI_API_KEY=your_gemini_key
+```
+
+**Option 2: OpenAI / DeepSeek / OpenRouter / Ollama**
+
+Set the provider to `openai` and configure the endpoint:
+```bash
+HBOX_AI_PROVIDER=openai
+HBOX_AI_OPENAI_KEY=your_api_key
+HBOX_AI_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+HBOX_AI_OPENAI_MODEL=google/gemini-2.0-flash-exp:free
+```
+
+Once configured, a "Start AI Recognition" button will appear on the item edit page.
 
 ## Screenshots
 ![Login Screen](.github/screenshots/1.png)

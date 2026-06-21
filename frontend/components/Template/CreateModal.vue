@@ -21,7 +21,7 @@
         <FormTextArea
           v-model="form.defaultDescription"
           :label="$t('components.template.form.item_description')"
-          :max-length="1000"
+          :max-length="10000"
         />
         <div class="grid grid-cols-2 gap-2">
           <FormTextField
@@ -80,6 +80,7 @@
           <FormTextField
             v-model="field.textValue"
             :label="$t('components.template.form.default_value')"
+            :max-length="5000"
             class="flex-1"
           />
           <Button type="button" size="icon" variant="ghost" @click="form.fields.splice(idx, 1)">

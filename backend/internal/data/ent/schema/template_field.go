@@ -28,7 +28,7 @@ func (TemplateField) Fields() []ent.Field {
 		field.Enum("type").
 			Values("text", "number", "boolean", "time"),
 		field.String("text_value").
-			MaxLen(500).
+			MaxLen(5000).
 			Optional(),
 		field.Int("number_value").
 			Optional(),
