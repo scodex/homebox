@@ -40,6 +40,7 @@ type EntityService struct {
 	filepath string
 
 	autoIncrementAssetID bool
+	aiConf conf.AiConf
 }
 
 func (svc *EntityService) Create(ctx Context, entity repo.EntityCreate) (repo.EntityOut, error) {
