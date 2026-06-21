@@ -62,6 +62,27 @@ type Config struct {
 	Otel       OTelConfig     `yaml:"otel"`
 	Auth       AuthConfig     `yaml:"auth"`
 	Notifier   NotifierConf   `yaml:"notifier"`
+	AI         AIConf         `yaml:"ai"`
+}
+
+type AIConf struct {
+	Provider      string `yaml:"provider"        conf:"default:gemini"` // gemini or openai
+	GeminiAPIKey  string `yaml:"gemini_api_key"`
+	OpenAIKey     string `yaml:"openai_key"`
+	OpenAIBaseURL string `yaml:"openai_base_url"  conf:"default:https://api.openai.com/v1"`
+	OpenAIModel   string `yaml:"openai_model"     conf:"default:gpt-4o-mini"`
+}
+
+func (c AIConf) MarshalJSON() ([]byte, error) {
+	type alias AIConf
+	a := alias(c)
+	if a.GeminiAPIKey != "" {
+		a.GeminiAPIKey = redactedValue
+	}
+	if a.OpenAIKey != "" {
+		a.OpenAIKey = redactedValue
+	}
+	return json.Marshal(a)
 }
 
 type Options struct {

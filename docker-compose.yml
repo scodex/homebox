@@ -13,6 +13,15 @@ services:
             - linux/arm64
             - linux/arm
     environment:
+      - HBOX_DEBUG=true
       - HBOX_LOGGER_LEVEL=-1
+      # --- AI Configuration (default: gemini) ---
+      - HBOX_AI_GEMINI_API_KEY=${HBOX_AI_GEMINI_API_KEY}
+      # To use OpenAI, DeepSeek, OpenRouter, or Ollama instead:
+      # - HBOX_AI_PROVIDER=openai
+      # - HBOX_AI_OPENAI_KEY=your-api-key
+      # - HBOX_AI_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+      # - HBOX_AI_OPENAI_MODEL=google/gemini-2.0-flash-exp:free
     ports:
       - 3100:7745
+
